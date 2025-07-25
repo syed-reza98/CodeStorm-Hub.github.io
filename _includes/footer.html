@@ -1,0 +1,72 @@
+<footer class="footer" role="contentinfo">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section footer-brand">
+                <div class="footer-logo">
+                    <img src="/assets/images/logo.svg" alt="CodeStorm Hub" width="40" height="40">
+                    <span class="logo-text">CodeStorm Hub</span>
+                </div>
+                <p class="footer-description">
+                    Innovative technology solutions that transform businesses and create exceptional digital experiences.
+                </p>
+                <div class="social-links">
+                    <a href="https://twitter.com/{{ site.twitter_username }}" class="social-link" aria-label="Follow us on Twitter" target="_blank" rel="noopener">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/{{ site.linkedin_username }}" class="social-link" aria-label="Connect on LinkedIn" target="_blank" rel="noopener">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/{{ site.github_username }}" class="social-link" aria-label="View our GitHub" target="_blank" rel="noopener">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="mailto:{{ site.email }}" class="social-link" aria-label="Send us an email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Services</h3>
+                <ul class="footer-links">
+                    <li><a href="{{ '/services/' | relative_url }}#web-development">Web Development</a></li>
+                    <li><a href="{{ '/services/' | relative_url }}#mobile-apps">Mobile Apps</a></li>
+                    <li><a href="{{ '/services/' | relative_url }}#cloud-solutions">Cloud Solutions</a></li>
+                    <li><a href="{{ '/services/' | relative_url }}#consulting">Consulting</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Company</h3>
+                <ul class="footer-links">
+                    <li><a href="{{ '/about/' | relative_url }}">About Us</a></li>
+                    <li><a href="{{ '/about/' | relative_url }}#team">Our Team</a></li>
+                    <li><a href="{{ '/portfolio/' | relative_url }}">Portfolio</a></li>
+                    <li><a href="{{ '/contact/' | relative_url }}">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Newsletter</h3>
+                <p class="newsletter-description">Stay updated with our latest news and insights.</p>
+                <form class="newsletter-form" action="#" method="post">
+                    <div class="input-group">
+                        <input type="email" name="email" placeholder="Enter your email" required aria-label="Email address">
+                        <button type="submit" class="btn btn-primary" aria-label="Subscribe to newsletter">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-legal">
+                <p>&copy; {{ 'now' | date: "%Y" }} {{ site.title }}. All rights reserved.</p>
+                <div class="legal-links">
+                    <a href="/privacy-policy/">Privacy Policy</a>
+                    <a href="/terms-of-service/">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
