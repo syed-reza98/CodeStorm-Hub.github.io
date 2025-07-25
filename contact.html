@@ -1,0 +1,412 @@
+---
+layout: default
+title: Contact Us
+description: Get in touch with CodeStorm Hub for your technology needs. Contact us for consultations, project inquiries, or partnership opportunities.
+keywords: contact, consultation, project inquiry, technology consulting, partnership, get in touch
+---
+
+<!-- Contact Hero Section -->
+<section class="contact-hero">
+    <div class="container">
+        <div class="contact-hero-content" data-aos="fade-up">
+            <h1 class="page-title">Get In Touch</h1>
+            <p class="page-description">
+                Ready to transform your business with innovative technology solutions? 
+                We'd love to hear about your project and discuss how we can help you achieve your goals.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Options Section -->
+<section class="contact-options">
+    <div class="container">
+        <div class="contact-grid">
+            <div class="contact-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="contact-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <h3 class="contact-title">Call Us</h3>
+                <p class="contact-description">
+                    Speak directly with our team for immediate assistance and consultation.
+                </p>
+                <a href="tel:+1-555-123-4567" class="contact-link">
+                    +1 (555) 123-4567
+                </a>
+            </div>
+            
+            <div class="contact-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3 class="contact-title">Email Us</h3>
+                <p class="contact-description">
+                    Send us your project details and we'll get back to you within 24 hours.
+                </p>
+                <a href="mailto:contact@codestormhub.com" class="contact-link">
+                    contact@codestormhub.com
+                </a>
+            </div>
+            
+            <div class="contact-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="contact-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3 class="contact-title">Visit Us</h3>
+                <p class="contact-description">
+                    Meet us in person at our office for detailed project discussions.
+                </p>
+                <address class="contact-link">
+                    123 Technology Drive<br>
+                    San Francisco, CA 94105<br>
+                    United States
+                </address>
+            </div>
+            
+            <div class="contact-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="contact-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="contact-title">Business Hours</h3>
+                <p class="contact-description">
+                    We're available during these hours for calls and meetings.
+                </p>
+                <div class="contact-link">
+                    Mon - Fri: 9:00 AM - 6:00 PM PST<br>
+                    Sat: 10:00 AM - 4:00 PM PST<br>
+                    Sun: Closed
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form Section -->
+<section class="contact-form-section">
+    <div class="container">
+        <div class="contact-form-container">
+            <div class="form-content" data-aos="fade-right">
+                <h2 class="section-title">Start Your Project</h2>
+                <p class="section-description">
+                    Tell us about your project requirements and we'll provide you with a detailed proposal and timeline.
+                </p>
+                
+                <form class="contact-form" id="contact-form" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" class="form-input" required>
+                            <span class="form-error" id="firstName-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" class="form-input" required>
+                            <span class="form-error" id="lastName-error"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                            <span class="form-error" id="email-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="form-input">
+                            <span class="form-error" id="phone-error"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company" class="form-label">Company Name</label>
+                        <input type="text" id="company" name="company" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectType" class="form-label">Project Type *</label>
+                        <select id="projectType" name="projectType" class="form-select" required>
+                            <option value="">Select a project type</option>
+                            <option value="web-development">Web Development</option>
+                            <option value="mobile-app">Mobile App Development</option>
+                            <option value="cloud-solutions">Cloud Solutions</option>
+                            <option value="consulting">Digital Transformation Consulting</option>
+                            <option value="maintenance">Maintenance & Support</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <span class="form-error" id="projectType-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="budget" class="form-label">Project Budget</label>
+                        <select id="budget" name="budget" class="form-select">
+                            <option value="">Select budget range</option>
+                            <option value="under-5k">Under $5,000</option>
+                            <option value="5k-15k">$5,000 - $15,000</option>
+                            <option value="15k-50k">$15,000 - $50,000</option>
+                            <option value="50k-100k">$50,000 - $100,000</option>
+                            <option value="over-100k">Over $100,000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="timeline" class="form-label">Project Timeline</label>
+                        <select id="timeline" name="timeline" class="form-select">
+                            <option value="">Select timeline</option>
+                            <option value="asap">ASAP</option>
+                            <option value="1-3-months">1-3 months</option>
+                            <option value="3-6-months">3-6 months</option>
+                            <option value="6-12-months">6-12 months</option>
+                            <option value="flexible">Flexible</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" class="form-label">Project Description *</label>
+                        <textarea id="message" name="message" class="form-textarea" rows="6" 
+                                  placeholder="Please describe your project requirements, goals, and any specific features you need..." required></textarea>
+                        <span class="form-error" id="message-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="newsletter" name="newsletter" class="form-checkbox">
+                            <span class="checkmark"></span>
+                            Subscribe to our newsletter for updates and insights
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="privacy" name="privacy" class="form-checkbox" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="/privacy-policy/" target="_blank">Privacy Policy</a> and <a href="/terms-of-service/" target="_blank">Terms of Service</a> *
+                        </label>
+                        <span class="form-error" id="privacy-error"></span>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg btn-block form-submit">
+                        <span class="submit-text">Send Message</span>
+                        <span class="submit-loading hidden">
+                            <i class="fas fa-spinner fa-spin"></i> Sending...
+                        </span>
+                    </button>
+                </form>
+            </div>
+            
+            <div class="form-sidebar" data-aos="fade-left">
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">Why Choose CodeStorm Hub?</h3>
+                    <ul class="sidebar-benefits">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Proven track record with 100+ successful projects</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Expert team of certified developers and consultants</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Agile development methodology with regular updates</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Comprehensive post-launch support and maintenance</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Transparent pricing with no hidden costs</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>24/7 customer support for enterprise clients</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">Our Process</h3>
+                    <div class="process-steps">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Discovery Call</h4>
+                                <p>Initial consultation to understand your needs</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Proposal</h4>
+                                <p>Detailed project proposal with timeline and costs</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Development</h4>
+                                <p>Agile development with regular progress updates</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Launch</h4>
+                                <p>Testing, deployment, and ongoing support</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">Quick Response</h3>
+                    <div class="response-time">
+                        <i class="fas fa-clock"></i>
+                        <div class="response-content">
+                            <h4>24 Hour Response</h4>
+                            <p>We guarantee a response to your inquiry within 24 hours during business days.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="map-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Find Us</h2>
+            <p class="section-description">
+                Visit our office for face-to-face consultations and project discussions
+            </p>
+        </div>
+    </div>
+    
+    <div class="map-container" data-aos="fade-up">
+        <div id="map" class="map">
+            <!-- Map will be loaded here -->
+            <div class="map-placeholder">
+                <i class="fas fa-map-marked-alt"></i>
+                <p>Interactive map loading...</p>
+                <p class="map-address">
+                    <strong>CodeStorm Hub</strong><br>
+                    123 Technology Drive<br>
+                    San Francisco, CA 94105<br>
+                    United States
+                </p>
+            </div>
+        </div>
+        
+        <div class="map-info">
+            <div class="location-card">
+                <h3>Our Location</h3>
+                <address>
+                    <strong>CodeStorm Hub</strong><br>
+                    123 Technology Drive<br>
+                    San Francisco, CA 94105<br>
+                    United States
+                </address>
+                
+                <div class="location-details">
+                    <div class="detail-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>contact@codestormhub.com</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Mon-Fri: 9AM-6PM PST</span>
+                    </div>
+                </div>
+                
+                <div class="location-actions">
+                    <a href="https://maps.google.com/?q=123+Technology+Drive,+San+Francisco,+CA+94105" 
+                       target="_blank" rel="noopener" class="btn btn-outline">
+                        <i class="fas fa-directions"></i>
+                        Get Directions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="contact-faq">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-description">
+                Common questions about working with us
+            </p>
+        </div>
+        
+        <div class="faq-grid">
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+                <button class="faq-question" aria-expanded="false">
+                    <span>How quickly can you start my project?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>We can typically start new projects within 1-2 weeks of contract signing. For urgent projects, we may be able to begin sooner depending on our current workload and your project requirements.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                <button class="faq-question" aria-expanded="false">
+                    <span>Do you offer free consultations?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes, we offer free initial consultations (up to 1 hour) to discuss your project requirements, provide recommendations, and give you a preliminary estimate. This helps us understand your needs and allows you to evaluate our expertise.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                <button class="faq-question" aria-expanded="false">
+                    <span>What information should I include in my project inquiry?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Please include your project goals, target audience, desired features, budget range, timeline, and any specific technical requirements. The more details you provide, the more accurate our initial assessment will be.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
+                <button class="faq-question" aria-expanded="false">
+                    <span>Do you work with international clients?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Absolutely! We work with clients worldwide and have experience managing projects across different time zones. We use modern collaboration tools to ensure smooth communication regardless of location.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="500">
+                <button class="faq-question" aria-expanded="false">
+                    <span>What happens after I submit this form?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Within 24 hours, you'll receive a response from our team acknowledging your inquiry. We'll then schedule a discovery call to discuss your project in detail and provide you with a comprehensive proposal within 3-5 business days.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="600">
+                <button class="faq-question" aria-expanded="false">
+                    <span>Can you help with existing projects or only new ones?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>We help with both new projects and existing ones. Whether you need to complete an unfinished project, modernize legacy systems, add new features, or provide ongoing maintenance, we're here to help.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

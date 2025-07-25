@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFormHandlers();
     initializeLoadingSpinner();
     initializeAccessibility();
+    initializePortfolioFilter();
+    initializeContactForm();
 });
 
 // Navigation functionality
@@ -397,6 +399,405 @@ function handleContactSubmit(e) {
     e.preventDefault();
     // Contact form handling will be implemented in contact page
     showNotification('Message sent successfully!', 'success');
+}
+
+// Portfolio filtering functionality
+function initializePortfolioFilter() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const portfolioProjects = document.querySelectorAll('.portfolio-project');
+    const loadMoreBtn = document.querySelector('.load-more-btn');
+    
+    if (filterButtons.length === 0 || portfolioProjects.length === 0) return;
+    
+    // Filter functionality
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const filter = button.getAttribute('data-filter');
+            
+            // Update active button
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Filter projects
+            portfolioProjects.forEach(project => {
+                const category = project.getAttribute('data-category');
+                
+                if (filter === 'all' || category === filter) {
+                    project.classList.remove('hidden');
+                    setTimeout(() => {
+                        project.style.opacity = '1';
+                        project.style.transform = 'scale(1)';
+                    }, 100);
+                } else {
+                    project.style.opacity = '0';
+                    project.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        project.classList.add('hidden');
+                    }, 300);
+                }
+            });
+            
+            // Announce filter change to screen readers
+            if (window.announceToScreenReader) {
+                const filterText = button.textContent.trim();
+                window.announceToScreenReader(`Filtered portfolio to show ${filterText}`);
+            }
+        });
+    });
+    
+    // Project details modal
+    const projectDetailsButtons = document.querySelectorAll('.project-details-btn');
+    const projectModal = document.querySelector('.project-modal');
+    const modalClose = document.querySelector('.modal-close');
+    const modalOverlay = document.querySelector('.modal-overlay');
+    
+    if (projectModal) {
+        projectDetailsButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const projectId = button.getAttribute('data-project');
+                openProjectModal(projectId);
+            });
+        });
+        
+        // Close modal events
+        if (modalClose) {
+            modalClose.addEventListener('click', closeProjectModal);
+        }
+        
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', closeProjectModal);
+        }
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && projectModal.classList.contains('active')) {
+                closeProjectModal();
+            }
+        });
+    }
+    
+    // Load more functionality (placeholder)
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            // In a real application, this would load more projects via API
+            showNotification('Loading more projects...', 'info');
+            setTimeout(() => {
+                showNotification('All projects loaded!', 'success');
+                loadMoreBtn.style.display = 'none';
+            }, 1500);
+        });
+    }
+}
+
+function openProjectModal(projectId) {
+    const modal = document.querySelector('.project-modal');
+    const modalBody = document.querySelector('.modal-body');
+    
+    if (!modal || !modalBody) return;
+    
+    // Project data (in a real application, this would come from an API)
+    const projectData = {
+        'ecommerce': {
+            title: 'TechMart E-commerce Platform',
+            category: 'Web Development',
+            year: '2023',
+            client: 'TechMart Inc.',
+            duration: '4 months',
+            team: '5 developers',
+            description: 'A comprehensive e-commerce solution built for a technology retailer, featuring advanced product management, real-time inventory tracking, AI-powered recommendations, and seamless payment integration.',
+            challenges: [
+                'Handling high traffic during peak sales periods',
+                'Integrating with multiple payment providers',
+                'Implementing real-time inventory synchronization',
+                'Creating an intuitive admin dashboard'
+            ],
+            solutions: [
+                'Implemented microservices architecture for scalability',
+                'Used Redis for caching and session management',
+                'Built custom inventory management system',
+                'Designed responsive admin interface with real-time updates'
+            ],
+            results: [
+                '150% increase in online sales',
+                '60% reduction in page load times',
+                '40% improvement in user engagement',
+                '99.9% uptime achieved'
+            ],
+            technologies: ['React', 'Node.js', 'MongoDB', 'Redis', 'Stripe', 'AWS'],
+            images: [
+                '/assets/images/portfolio/ecommerce-1.jpg',
+                '/assets/images/portfolio/ecommerce-2.jpg',
+                '/assets/images/portfolio/ecommerce-3.jpg'
+            ]
+        }
+        // Add more project data as needed
+    };
+    
+    const project = projectData[projectId];
+    if (!project) return;
+    
+    // Generate modal content
+    modalBody.innerHTML = `
+        <div class="project-detail">
+            <div class="project-header">
+                <h2 class="project-title">${project.title}</h2>
+                <div class="project-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-tag"></i>
+                        ${project.category}
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        ${project.year}
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        ${project.duration}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="project-content">
+                <div class="content-section">
+                    <h3>Project Overview</h3>
+                    <p>${project.description}</p>
+                </div>
+                
+                <div class="content-section">
+                    <h3>Challenges</h3>
+                    <ul>
+                        ${project.challenges.map(challenge => `<li>${challenge}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="content-section">
+                    <h3>Our Solutions</h3>
+                    <ul>
+                        ${project.solutions.map(solution => `<li>${solution}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="content-section">
+                    <h3>Results</h3>
+                    <ul class="results-list">
+                        ${project.results.map(result => `<li><i class="fas fa-check-circle"></i>${result}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="content-section">
+                    <h3>Technologies Used</h3>
+                    <div class="tech-tags">
+                        ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Show modal
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Focus management for accessibility
+    const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (firstFocusable) {
+        firstFocusable.focus();
+    }
+}
+
+function closeProjectModal() {
+    const modal = document.querySelector('.project-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Contact form functionality
+function initializeContactForm() {
+    const contactForm = document.getElementById('contact-form');
+    if (!contactForm) return;
+    
+    const submitButton = contactForm.querySelector('.form-submit');
+    const submitText = submitButton.querySelector('.submit-text');
+    const submitLoading = submitButton.querySelector('.submit-loading');
+    
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Clear previous errors
+        clearFormErrors(contactForm);
+        
+        // Validate form
+        const isValid = validateContactForm(contactForm);
+        
+        if (!isValid) {
+            showNotification('Please correct the errors in the form', 'error');
+            return;
+        }
+        
+        // Show loading state
+        submitText.classList.add('hidden');
+        submitLoading.classList.remove('hidden');
+        submitButton.disabled = true;
+        
+        // Collect form data
+        const formData = new FormData(contactForm);
+        const data = Object.fromEntries(formData.entries());
+        
+        try {
+            // Simulate API call (replace with actual endpoint)
+            await simulateFormSubmission(data);
+            
+            showNotification('Thank you! Your message has been sent successfully. We\'ll get back to you within 24 hours.', 'success');
+            contactForm.reset();
+            
+            // Track form submission (if analytics is set up)
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_submit', {
+                    event_category: 'Contact',
+                    event_label: data.projectType || 'general'
+                });
+            }
+            
+        } catch (error) {
+            console.error('Form submission error:', error);
+            showNotification('Sorry, there was an error sending your message. Please try again or contact us directly.', 'error');
+        } finally {
+            // Reset button state
+            submitText.classList.remove('hidden');
+            submitLoading.classList.add('hidden');
+            submitButton.disabled = false;
+        }
+    });
+    
+    // Real-time validation
+    const inputs = contactForm.querySelectorAll('.form-input, .form-select, .form-textarea');
+    inputs.forEach(input => {
+        input.addEventListener('blur', () => {
+            validateField(input);
+        });
+        
+        input.addEventListener('input', () => {
+            // Clear error when user starts typing
+            const errorElement = document.getElementById(`${input.name}-error`);
+            if (errorElement) {
+                errorElement.textContent = '';
+                errorElement.classList.remove('visible');
+                input.classList.remove('error');
+            }
+        });
+    });
+    
+    // Phone number formatting
+    const phoneInput = contactForm.querySelector('#phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', (e) => {
+            e.target.value = utils.formatPhoneNumber(e.target.value);
+        });
+    }
+}
+
+function validateContactForm(form) {
+    let isValid = true;
+    
+    // Required fields validation
+    const requiredFields = form.querySelectorAll('[required]');
+    requiredFields.forEach(field => {
+        if (!validateField(field)) {
+            isValid = false;
+        }
+    });
+    
+    return isValid;
+}
+
+function validateField(field) {
+    const value = field.value.trim();
+    const fieldName = field.name;
+    const errorElement = document.getElementById(`${fieldName}-error`);
+    
+    let isValid = true;
+    let errorMessage = '';
+    
+    // Required field validation
+    if (field.hasAttribute('required') && !value) {
+        isValid = false;
+        errorMessage = 'This field is required';
+    }
+    
+    // Email validation
+    else if (fieldName === 'email' && value) {
+        if (!isValidEmail(value)) {
+            isValid = false;
+            errorMessage = 'Please enter a valid email address';
+        }
+    }
+    
+    // Phone validation
+    else if (fieldName === 'phone' && value) {
+        const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
+        if (!phoneRegex.test(value)) {
+            isValid = false;
+            errorMessage = 'Please enter a valid phone number';
+        }
+    }
+    
+    // Name validation
+    else if ((fieldName === 'firstName' || fieldName === 'lastName') && value) {
+        if (value.length < 2) {
+            isValid = false;
+            errorMessage = 'Name must be at least 2 characters long';
+        }
+    }
+    
+    // Message validation
+    else if (fieldName === 'message' && value) {
+        if (value.length < 10) {
+            isValid = false;
+            errorMessage = 'Please provide more details about your project (at least 10 characters)';
+        }
+    }
+    
+    // Update field appearance and error message
+    if (errorElement) {
+        errorElement.textContent = errorMessage;
+        errorElement.classList.toggle('visible', !isValid);
+    }
+    
+    field.classList.toggle('error', !isValid);
+    
+    return isValid;
+}
+
+function clearFormErrors(form) {
+    const errorElements = form.querySelectorAll('.form-error');
+    const inputElements = form.querySelectorAll('.form-input, .form-select, .form-textarea');
+    
+    errorElements.forEach(error => {
+        error.textContent = '';
+        error.classList.remove('visible');
+    });
+    
+    inputElements.forEach(input => {
+        input.classList.remove('error');
+    });
+}
+
+async function simulateFormSubmission(data) {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Simulate occasional errors for testing
+    if (Math.random() < 0.1) {
+        throw new Error('Network error');
+    }
+    
+    // In a real application, you would send data to your backend
+    console.log('Form submitted with data:', data);
+    
+    return { success: true };
 }
 
 // FAQ functionality
