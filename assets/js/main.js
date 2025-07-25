@@ -362,6 +362,9 @@ function initializeFormHandlers() {
     contactForms.forEach(form => {
         form.addEventListener('submit', handleContactSubmit);
     });
+    
+    // FAQ toggles
+    initializeFAQ();
 }
 
 function handleNewsletterSubmit(e) {
@@ -396,10 +399,65 @@ function handleContactSubmit(e) {
     showNotification('Message sent successfully!', 'success');
 }
 
+// FAQ functionality
+function initializeFAQ() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        
+        if (question && answer) {
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all FAQ items
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    const otherQuestion = otherItem.querySelector('.faq-question');
+                    const otherAnswer = otherItem.querySelector('.faq-answer');
+                    if (otherQuestion && otherAnswer) {
+                        otherQuestion.setAttribute('aria-expanded', 'false');
+                        otherAnswer.style.maxHeight = '0';
+                    }
+                });
+                
+                // Toggle current item
+                if (!isActive) {
+                    item.classList.add('active');
+                    question.setAttribute('aria-expanded', 'true');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    
+                    // Scroll to item if needed
+                    setTimeout(() => {
+                        if (!isElementInViewport(item)) {
+                            item.scrollIntoView({ 
+                                behavior: 'smooth', 
+                                block: 'center' 
+                            });
+                        }
+                    }, 300);
+                }
+            });
+        }
+    });
+}
+
 // Email validation helper
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+}
+
+// Check if element is in viewport helper
+function isElementInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
 }
 
 // Notification system
