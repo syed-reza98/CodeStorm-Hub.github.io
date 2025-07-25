@@ -1,0 +1,62 @@
+<header class="header" role="banner">
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="{{ '/' | relative_url }}" class="logo" aria-label="CodeStorm Hub home">
+                    <img src="/assets/images/logo.svg" alt="CodeStorm Hub" width="40" height="40">
+                    <span class="logo-text">CodeStorm Hub</span>
+                </a>
+                
+                <!-- Mobile menu button -->
+                <button class="mobile-menu-btn" aria-label="Toggle mobile menu" aria-expanded="false">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+            
+            <div class="navbar-menu">
+                <ul class="navbar-nav" role="menubar">
+                    <li class="nav-item" role="none">
+                        <a href="{{ '/' | relative_url }}" class="nav-link {% if page.url == '/' %}active{% endif %}" role="menuitem">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item" role="none">
+                        <a href="{{ '/about/' | relative_url }}" class="nav-link {% if page.url contains '/about' %}active{% endif %}" role="menuitem">
+                            About
+                        </a>
+                    </li>
+                    <li class="nav-item" role="none">
+                        <a href="{{ '/services/' | relative_url }}" class="nav-link {% if page.url contains '/services' %}active{% endif %}" role="menuitem">
+                            Services
+                        </a>
+                    </li>
+                    <li class="nav-item" role="none">
+                        <a href="{{ '/portfolio/' | relative_url }}" class="nav-link {% if page.url contains '/portfolio' %}active{% endif %}" role="menuitem">
+                            Portfolio
+                        </a>
+                    </li>
+                    <li class="nav-item" role="none">
+                        <a href="{{ '/contact/' | relative_url }}" class="nav-link {% if page.url contains '/contact' %}active{% endif %}" role="menuitem">
+                            Contact
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-actions">
+                    <!-- Theme toggle -->
+                    <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                        <i class="fas fa-moon dark-icon"></i>
+                        <i class="fas fa-sun light-icon"></i>
+                    </button>
+                    
+                    <!-- CTA Button -->
+                    <a href="{{ '/contact/' | relative_url }}" class="btn btn-primary cta-btn">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,73 @@
+# Site settings
+title: CodeStorm Hub
+email: contact@codestormhub.com
+description: >-
+  A leading technology company specializing in innovative software solutions,
+  web development, and digital transformation services. We storm through
+  challenges to deliver exceptional results.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://codestorm-hub.github.io" # the base hostname & protocol for your site
+twitter_username: codestormhub
+github_username: CodeStorm-Hub
+linkedin_username: codestormhub
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - README.md
+
+# Collections
+collections:
+  projects:
+    output: true
+    permalink: /:collection/:name/
+  team:
+    output: false
+
+# Default layouts
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# SEO settings
+author: CodeStorm Hub
+logo: /assets/images/logo.png
+social:
+  name: CodeStorm Hub
+  links:
+    - https://twitter.com/codestormhub
+    - https://www.linkedin.com/company/codestormhub
+    - https://github.com/CodeStorm-Hub
+
+# Analytics
+google_analytics: G-XXXXXXXXXX
+
+# Contact form settings
+contact_form_action: "https://formspree.io/f/your-form-id"
