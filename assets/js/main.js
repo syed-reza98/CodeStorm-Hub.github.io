@@ -1,18 +1,54 @@
 // Main JavaScript file for CodeStorm Hub website
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all components
-    initializeNavigation();
-    initializeThemeToggle();
-    initializeScrollEffects();
-    initializeAnimations();
-    initializeTestimonialSlider();
-    initializeFormHandlers();
-    initializeLoadingSpinner();
-    initializeAccessibility();
-    initializePortfolioFilter();
-    initializeContactForm();
-    initializeMobileEnhancements();
-    initializeScrollProgress();
+// Performance optimized with debouncing, throttling, and efficient event handling
+
+// Utility functions for performance optimization
+function debounce(func, delay) {
+    let timeoutId;
+    return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+function throttle(func, delay) {
+    let inProgress = false;
+    return function (...args) {
+        if (inProgress) return;
+        inProgress = true;
+        func.apply(this, args);
+        setTimeout(() => inProgress = false, delay);
+    };
+}
+
+// Efficient DOM ready check
+function domReady(callback) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', callback);
+    } else {
+        callback();
+    }
+}
+
+// Initialize all components when DOM is ready
+domReady(function() {
+    // Initialize components with error handling
+    try {
+        initializeNavigation();
+        initializeThemeToggle();
+        initializeScrollEffects();
+        initializeAnimations();
+        initializeTestimonialSlider();
+        initializeFormHandlers();
+        initializeLoadingSpinner();
+        initializeAccessibility();
+        initializePortfolioFilter();
+        initializeContactForm();
+        initializeMobileEnhancements();
+        initializeScrollProgress();
+        initializePerformanceOptimizations();
+    } catch (error) {
+        console.error('Error initializing components:', error);
+    }
 });
 
 // Enhanced navigation functionality with mobile improvements
@@ -103,7 +139,8 @@ function initializeNavigation() {
         let lastScrollY = window.scrollY;
         let ticking = false;
         
-        function updateHeader() {
+        // Enhanced header scroll effect with better performance
+        const updateHeader = throttle(() => {
             const currentScrollY = window.scrollY;
             
             if (currentScrollY > 100) {
@@ -119,15 +156,9 @@ function initializeNavigation() {
             }
             
             lastScrollY = currentScrollY;
-            ticking = false;
-        }
+        }, 16); // 60fps throttling
         
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(updateHeader);
-                ticking = true;
-            }
-        });
+        window.addEventListener('scroll', updateHeader, { passive: true });
     }
     
     // Enhanced smooth scrolling for anchor links
@@ -1471,8 +1502,104 @@ function optimizeImagePerformance() {
     });
 }
 
+// Performance optimization functions
+function initializePerformanceOptimizations() {
+    // Preload critical resources
+    preloadCriticalResources();
+    
+    // Optimize images
+    optimizeImages();
+    
+    // Initialize service worker if supported
+    initializeServiceWorker();
+    
+    // Add connection-aware loading
+    initializeConnectionAwareLoading();
+}
+
+function preloadCriticalResources() {
+    const criticalResources = [
+        '/assets/css/style.css',
+        '/assets/js/main.js',
+        '/assets/images/logo.svg'
+    ];
+    
+    criticalResources.forEach(resource => {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        
+        if (resource.endsWith('.css')) {
+            link.as = 'style';
+        } else if (resource.endsWith('.js')) {
+            link.as = 'script';
+        } else if (resource.includes('images')) {
+            link.as = 'image';
+        }
+        
+        link.href = resource;
+        document.head.appendChild(link);
+    });
+}
+
+function optimizeImages() {
+    // Add responsive image loading
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+        // Add loading attribute if not present
+        if (!img.hasAttribute('loading')) {
+            img.loading = 'lazy';
+        }
+        
+        // Add decoding attribute for better performance
+        if (!img.hasAttribute('decoding')) {
+            img.decoding = 'async';
+        }
+        
+        // Add error handling
+        img.addEventListener('error', function() {
+            console.warn(`Failed to load image: ${this.src}`);
+            this.style.display = 'none';
+        });
+    });
+}
+
+function initializeServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('Service Worker registered successfully:', registration);
+            })
+            .catch(error => {
+                console.warn('Service Worker registration failed:', error);
+            });
+    }
+}
+
+function initializeConnectionAwareLoading() {
+    // Check if connection API is supported
+    if ('connection' in navigator) {
+        const connection = navigator.connection;
+        
+        // Adjust loading strategy based on connection
+        if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+            // Disable some non-critical features for slow connections
+            document.body.classList.add('slow-connection');
+            
+            // Reduce image quality
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                if (img.src && !img.src.includes('low-quality')) {
+                    // You could implement low-quality image variants here
+                    console.log('Slow connection detected, consider loading lower quality images');
+                }
+            });
+        }
+    }
+}
+
 // Initialize breadcrumbs if container exists
-document.addEventListener('DOMContentLoaded', () => {
+domReady(() => {
     initializeBreadcrumbs();
     initializeImageOptimization();
     optimizeImagePerformance();

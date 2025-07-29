@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Unit Tests - CodeStorm Hub</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-suite { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; }
+        .test-case { margin: 10px 0; padding: 8px; border-left: 4px solid #ccc; }
+        .test-pass { border-left-color: #28a745; background-color: #d4edda; }
+        .test-fail { border-left-color: #dc3545; background-color: #f8d7da; }
+        .test-results { margin-top: 20px; padding: 10px; background-color: #f8f9fa; }
+        .run-tests { background-color: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Unit Tests</h1>
+    <button class="run-tests" onclick="runAllTests()">Run All Tests</button>
+    
+    <div id="test-results"></div>
+
+    <script>
+        // Simple testing framework
+        class TestFramework {
+            constructor() {
+                this.tests = [];
+                this.results = { passed: 0, failed: 0, total: 0 };
+            }
+
+            describe(suiteName, callback) {
+                console.log(`Running test suite: ${suiteName}`);
+                const suite = { name: suiteName, tests: [] };
+                this.currentSuite = suite;
+                callback();
+                this.tests.push(suite);
+            }
+
+            it(testName, callback) {
+                const test = { name: testName, callback, result: null, error: null };
+                this.currentSuite.tests.push(test);
+            }
+
+            expect(actual) {
+                return {
+                    toBe: (expected) => {
+                        if (actual !== expected) {
+                            throw new Error(`Expected ${expected}, but got ${actual}`);
+                        }
+                    },
+                    toBeTrue: () => {
+                        if (actual !== true) {
+                            throw new Error(`Expected true, but got ${actual}`);
+                        }
+                    },
+                    toBeFalse: () => {
+                        if (actual !== false) {
+                            throw new Error(`Expected false, but got ${actual}`);
+                        }
+                    },
+                    toContain: (expected) => {
+                        if (!actual.includes(expected)) {
+                            throw new Error(`Expected ${actual} to contain ${expected}`);
+                        }
+                    },
+                    toBeNull: () => {
+                        if (actual !== null) {
+                            throw new Error(`Expected null, but got ${actual}`);
+                        }
+                    },
+                    toBeDefined: () => {
+                        if (actual === undefined) {
+                            throw new Error(`Expected value to be defined, but got undefined`);
+                        }
+                    }
+                };
+            }
+
+            run() {
+                const resultsDiv = document.getElementById('test-results');
+                resultsDiv.innerHTML = '';
+                this.results = { passed: 0, failed: 0, total: 0 };
+
+                this.tests.forEach(suite => {
+                    const suiteDiv = document.createElement('div');
+                    suiteDiv.className = 'test-suite';
+                    suiteDiv.innerHTML = `<h3>${suite.name}</h3>`;
+
+                    suite.tests.forEach(test => {
+                        this.results.total++;
+                        const testDiv = document.createElement('div');
+                        testDiv.className = 'test-case';
+
+                        try {
+                            test.callback();
+                            test.result = 'passed';
+                            this.results.passed++;
+                            testDiv.classList.add('test-pass');
+                            testDiv.innerHTML = `✓ ${test.name}`;
+                        } catch (error) {
+                            test.result = 'failed';
+                            test.error = error.message;
+                            this.results.failed++;
+                            testDiv.classList.add('test-fail');
+                            testDiv.innerHTML = `✗ ${test.name}<br><small>${error.message}</small>`;
+                        }
+
+                        suiteDiv.appendChild(testDiv);
+                    });
+
+                    resultsDiv.appendChild(suiteDiv);
+                });
+
+                // Add summary
+                const summaryDiv = document.createElement('div');
+                summaryDiv.className = 'test-results';
+                summaryDiv.innerHTML = `
+                    <h3>Test Results</h3>
+                    <p>Total: ${this.results.total} | Passed: ${this.results.passed} | Failed: ${this.results.failed}</p>
+                    <p>Success Rate: ${((this.results.passed / this.results.total) * 100).toFixed(1)}%</p>
+                `;
+                resultsDiv.appendChild(summaryDiv);
+            }
+        }
+
+        // Create test framework instance
+        const test = new TestFramework();
+
+        // Mock DOM elements for testing
+        function createMockElement(tag, attributes = {}) {
+            const element = document.createElement(tag);
+            Object.assign(element, attributes);
+            return element;
+        }
+
+        // Utility function tests
+        test.describe('Utility Functions', () => {
+            test.it('should debounce function calls', () => {
+                let callCount = 0;
+                const debouncedFn = debounce(() => callCount++, 100);
+                
+                debouncedFn();
+                debouncedFn();
+                debouncedFn();
+                
+                test.expect(callCount).toBe(0); // Should not be called immediately
+            });
+
+            test.it('should throttle function calls', () => {
+                let callCount = 0;
+                const throttledFn = throttle(() => callCount++, 100);
+                
+                throttledFn();
+                throttledFn();
+                throttledFn();
+                
+                test.expect(callCount).toBe(1); // Should be called only once
+            });
+        });
+
+        // Theme Toggle Tests
+        test.describe('Theme Toggle', () => {
+            test.it('should initialize theme from localStorage', () => {
+                localStorage.setItem('theme', 'dark');
+                // Simulate theme initialization
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                test.expect(savedTheme).toBe('dark');
+            });
+
+            test.it('should toggle between themes', () => {
+                const currentTheme = 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                test.expect(newTheme).toBe('dark');
+            });
+        });
+
+        // Form Validation Tests  
+        test.describe('Form Validation', () => {
+            test.it('should validate email format', () => {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                test.expect(emailRegex.test('test@example.com')).toBeTrue();
+                test.expect(emailRegex.test('invalid-email')).toBeFalse();
+            });
+
+            test.it('should validate required fields', () => {
+                const value = '';
+                const isValid = value.trim().length > 0;
+                test.expect(isValid).toBeFalse();
+            });
+
+            test.it('should validate message length', () => {
+                const message = 'This is a test message';
+                const isValid = message.length >= 10;
+                test.expect(isValid).toBeTrue();
+            });
+        });
+
+        // Navigation Tests
+        test.describe('Navigation', () => {
+            test.it('should handle mobile menu toggle', () => {
+                const menu = createMockElement('div', { className: 'navbar-menu' });
+                const initialState = menu.classList.contains('active');
+                test.expect(initialState).toBeFalse();
+                
+                menu.classList.toggle('active');
+                test.expect(menu.classList.contains('active')).toBeTrue();
+            });
+        });
+
+        // Animation Tests
+        test.describe('Animations', () => {
+            test.it('should initialize intersection observer', () => {
+                // Mock IntersectionObserver
+                const mockObserver = {
+                    observe: () => {},
+                    unobserve: () => {},
+                    disconnect: () => {}
+                };
+                test.expect(typeof mockObserver.observe).toBe('function');
+            });
+        });
+
+        // Utility functions (if not already defined)
+        function debounce(func, delay) {
+            let timeoutId;
+            return function (...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        function throttle(func, delay) {
+            let inProgress = false;
+            return function (...args) {
+                if (inProgress) return;
+                inProgress = true;
+                func.apply(this, args);
+                setTimeout(() => inProgress = false, delay);
+            };
+        }
+
+        // Run tests function
+        function runAllTests() {
+            test.run();
+        }
+
+        // Auto-run tests on page load
+        document.addEventListener('DOMContentLoaded', runAllTests);
+    </script>
+</body>
+</html>

@@ -71,3 +71,30 @@ google_analytics: G-XXXXXXXXXX
 
 # Contact form settings
 contact_form_action: "https://formspree.io/f/your-form-id"
+
+# Performance and SEO settings
+permalink: pretty
+future: false
+show_drafts: false
+safe: true
+
+# Compression settings
+sass:
+  style: compressed
+  sourcemap: never
+
+# Content Security Policy
+content_security_policy:
+  default_src: "'self'"
+  script_src: "'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com"
+  style_src: "'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com"
+  font_src: "'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com"
+  img_src: "'self' data: https: *.google-analytics.com"
+  connect_src: "'self' https://www.google-analytics.com"
+
+# Additional meta tags
+meta_tags:
+  robots: "index, follow"
+  rating: "general"
+  distribution: "global"
+  charset: "utf-8"
