@@ -705,9 +705,26 @@ function initializeContactForm() {
     const submitButton = contactForm.querySelector('.form-submit');
     const submitText = submitButton.querySelector('.submit-text');
     const submitLoading = submitButton.querySelector('.submit-loading');
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('general-error');
+    
+    // Real-time validation
+    const formFields = contactForm.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox');
+    formFields.forEach(field => {
+        field.addEventListener('blur', () => validateField(field));
+        field.addEventListener('input', debounce(() => {
+            if (field.classList.contains('error')) {
+                validateField(field);
+            }
+        }, 300));
+    });
     
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        // Hide previous messages
+        if (successMessage) successMessage.classList.add('hidden');
+        if (errorMessage) errorMessage.classList.add('hidden');
         
         // Clear previous errors
         clearFormErrors(contactForm);
@@ -716,9 +733,55 @@ function initializeContactForm() {
         const isValid = validateContactForm(contactForm);
         
         if (!isValid) {
-            showNotification('Please correct the errors in the form', 'error');
+            // Focus on first error field
+            const firstError = contactForm.querySelector('.error');
+            if (firstError) {
+                firstError.focus();
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
             return;
         }
+        
+        // Show loading state
+        submitButton.disabled = true;
+        submitText.classList.add('hidden');
+        submitLoading.classList.remove('hidden');
+        
+        try {
+            // Simulate form submission (replace with actual endpoint)
+            await simulateFormSubmission(new FormData(contactForm));
+            
+            // Show success message
+            if (successMessage) {
+                successMessage.classList.remove('hidden');
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            // Reset form
+            contactForm.reset();
+            
+            // Clear validation states
+            contactForm.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
+                field.classList.remove('error', 'success');
+            });
+            
+        } catch (error) {
+            console.error('Form submission error:', error);
+            
+            // Show error message
+            if (errorMessage) {
+                errorMessage.classList.remove('hidden');
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+        } finally {
+            // Reset button state
+            submitButton.disabled = false;
+            submitText.classList.remove('hidden');
+            submitLoading.classList.add('hidden');
+        }
+    });
+}
         
         // Show loading state
         submitText.classList.add('hidden');
@@ -784,14 +847,26 @@ function initializeContactForm() {
 
 function validateContactForm(form) {
     let isValid = true;
+    const errors = [];
+    
+    // Clear previous validation states
+    form.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
+        field.classList.remove('error', 'success');
+    });
     
     // Required fields validation
     const requiredFields = form.querySelectorAll('[required]');
     requiredFields.forEach(field => {
         if (!validateField(field)) {
             isValid = false;
+            errors.push(`${field.name}: ${getFieldErrorMessage(field)}`);
         }
     });
+    
+    // Log validation results for debugging
+    if (!isValid) {
+        console.log('Form validation failed:', errors);
+    }
     
     return isValid;
 }
@@ -807,32 +882,94 @@ function validateField(field) {
     // Required field validation
     if (field.hasAttribute('required') && !value) {
         isValid = false;
-        errorMessage = 'This field is required';
+        errorMessage = getRequiredFieldMessage(fieldName);
     }
     
-    // Email validation
+    // Email validation (enhanced)
     else if (fieldName === 'email' && value) {
         if (!isValidEmail(value)) {
             isValid = false;
-            errorMessage = 'Please enter a valid email address';
+            errorMessage = 'Please enter a valid email address (e.g., name@domain.com)';
         }
     }
     
-    // Phone validation
+    // Phone validation (more flexible)
     else if (fieldName === 'phone' && value) {
-        const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
+        const phoneRegex = /^[\+]?[\d\s\(\)\-\.]{10,}$/;
         if (!phoneRegex.test(value)) {
             isValid = false;
-            errorMessage = 'Please enter a valid phone number';
+            errorMessage = 'Please enter a valid phone number (at least 10 digits)';
         }
     }
     
-    // Name validation
+    // Name validation (enhanced)
     else if ((fieldName === 'firstName' || fieldName === 'lastName') && value) {
         if (value.length < 2) {
             isValid = false;
             errorMessage = 'Name must be at least 2 characters long';
+        } else if (!/^[a-zA-Z\s\-\'\.]+$/.test(value)) {
+            isValid = false;
+            errorMessage = 'Name can only contain letters, spaces, hyphens, and apostrophes';
         }
+    }
+    
+    // Message validation (enhanced)
+    else if (fieldName === 'message' && value) {
+        if (value.length < 50) {
+            isValid = false;
+            errorMessage = `Message must be at least 50 characters long (currently ${value.length})`;
+        } else if (value.length > 1000) {
+            isValid = false;
+            errorMessage = `Message must be no more than 1000 characters (currently ${value.length})`;
+        }
+    }
+    
+    // Project type validation
+    else if (fieldName === 'projectType' && field.hasAttribute('required') && !value) {
+        isValid = false;
+        errorMessage = 'Please select a project type';
+    }
+    
+    // Privacy checkbox validation
+    else if (fieldName === 'privacy' && field.hasAttribute('required') && !field.checked) {
+        isValid = false;
+        errorMessage = 'You must agree to the Privacy Policy and Terms of Service';
+    }
+    
+    // Update field appearance and error message
+    if (errorElement) {
+        if (isValid) {
+            errorElement.textContent = '';
+            errorElement.classList.remove('visible');
+            field.classList.remove('error');
+            field.classList.add('success');
+        } else {
+            errorElement.textContent = errorMessage;
+            errorElement.classList.add('visible');
+            field.classList.add('error');
+            field.classList.remove('success');
+        }
+    }
+    
+    return isValid;
+}
+
+function getRequiredFieldMessage(fieldName) {
+    const messages = {
+        'firstName': 'First name is required',
+        'lastName': 'Last name is required',
+        'email': 'Email address is required',
+        'message': 'Project description is required',
+        'projectType': 'Please select a project type',
+        'privacy': 'You must agree to the Privacy Policy and Terms of Service'
+    };
+    return messages[fieldName] || 'This field is required';
+}
+
+function getFieldErrorMessage(field) {
+    const errorElement = document.getElementById(`${field.name}-error`);
+    return errorElement ? errorElement.textContent : 'Invalid value';
+}
     }
     
     // Message validation
@@ -1632,3 +1769,71 @@ function initializeServiceWorker() {
     }
 }
 // initializeServiceWorker();
+
+// Form submission simulation (replace with actual API endpoint)
+async function simulateFormSubmission(formData) {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Log form data for debugging
+    const data = {};
+    for (let [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+    console.log('Form submission data:', data);
+    
+    // Simulate random success/failure for testing
+    if (Math.random() > 0.1) { // 90% success rate
+        return { success: true, message: 'Form submitted successfully' };
+    } else {
+        throw new Error('Simulated submission failure');
+    }
+}
+
+// Utility function to clear form errors
+function clearFormErrors(form) {
+    form.querySelectorAll('.form-error').forEach(error => {
+        error.textContent = '';
+        error.classList.remove('visible');
+    });
+    
+    form.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
+        field.classList.remove('error', 'success');
+    });
+}
+
+// Enhanced email validation
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email) && email.length <= 254;
+}
+
+// Character counter for textarea
+function initializeCharacterCounters() {
+    const textareas = document.querySelectorAll('textarea[maxlength]');
+    
+    textareas.forEach(textarea => {
+        const maxLength = parseInt(textarea.getAttribute('maxlength'));
+        const counter = document.createElement('div');
+        counter.className = 'character-counter';
+        counter.textContent = `0 / ${maxLength}`;
+        
+        textarea.parentNode.appendChild(counter);
+        
+        textarea.addEventListener('input', () => {
+            const currentLength = textarea.value.length;
+            counter.textContent = `${currentLength} / ${maxLength}`;
+            
+            if (currentLength > maxLength * 0.9) {
+                counter.style.color = 'var(--warning-color)';
+            } else {
+                counter.style.color = 'var(--text-muted)';
+            }
+        });
+    });
+}
+
+// Initialize character counters when DOM is ready
+domReady(() => {
+    initializeCharacterCounters();
+});
