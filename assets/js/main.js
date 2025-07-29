@@ -1284,7 +1284,9 @@ function initializeMobileEnhancements() {
             const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
             if (navbarMenu && navbarMenu.classList.contains('active')) {
                 navbarMenu.classList.remove('active');
-                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                }
             }
         }, 100);
     });
