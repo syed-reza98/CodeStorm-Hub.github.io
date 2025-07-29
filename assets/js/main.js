@@ -91,6 +91,8 @@ function initializeNavigation() {
                         top: targetPosition,
                         behavior: 'smooth'
                     });
+                } else {
+                    console.warn(`Target element not found for selector: ${link.getAttribute('href')}`);
                 }
             }
         });
