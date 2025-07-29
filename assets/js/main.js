@@ -1106,21 +1106,6 @@ function initializePerformanceMonitoring() {
     });
 }
 
-// Service Worker registration (for PWA features)
-function initializeServiceWorker() {
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-                .then(registration => {
-                    console.log('SW registered: ', registration);
-                })
-                .catch(registrationError => {
-                    console.log('SW registration failed: ', registrationError);
-                });
-        });
-    }
-}
-
 // Utility functions
 const utils = {
     // Debounce function for performance
@@ -1177,8 +1162,6 @@ window.CodeStormUtils = utils;
 
 // Initialize performance monitoring
 initializePerformanceMonitoring();
-
-// Optional: Initialize service worker for PWA features
 
 // Mobile-specific enhancements
 function initializeMobileEnhancements() {
@@ -1386,8 +1369,121 @@ window.addEventListener('error', (e) => {
     }
 });
 
+// Enhanced image lazy loading
+function initializeImageOptimization() {
+    // Check if browser supports intersection observer
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    
+                    // If image has data-src, use it for lazy loading
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.classList.add('loading');
+                        
+                        img.addEventListener('load', () => {
+                            img.classList.remove('loading');
+                            img.classList.add('loaded');
+                        });
+                        
+                        img.addEventListener('error', () => {
+                            img.classList.add('error');
+                            img.alt = 'Image failed to load';
+                        });
+                        
+                        delete img.dataset.src;
+                    }
+                    
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px 0px',
+            threshold: 0.1
+        });
+        
+        // Observe all images with data-src attribute
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+        
+        // Also observe regular images for fade-in effect
+        document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+            if (!img.complete) {
+                img.style.opacity = '0';
+                img.addEventListener('load', () => {
+                    img.style.transition = 'opacity 0.3s ease';
+                    img.style.opacity = '1';
+                });
+            }
+        });
+    }
+    
+    // Fallback for browsers without intersection observer
+    else {
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            img.src = img.dataset.src;
+            delete img.dataset.src;
+        });
+    }
+}
+
+// Performance optimization for images
+function optimizeImagePerformance() {
+    // Add responsive image handling
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        // Add better loading attributes
+        if (!img.hasAttribute('loading')) {
+            // Don't lazy load above-the-fold images
+            const rect = img.getBoundingClientRect();
+            if (rect.top < window.innerHeight) {
+                img.loading = 'eager';
+            } else {
+                img.loading = 'lazy';
+            }
+        }
+        
+        // Add decoding attribute for better performance
+        if (!img.hasAttribute('decoding')) {
+            img.decoding = 'async';
+        }
+    });
+}
+
 // Initialize breadcrumbs if container exists
 document.addEventListener('DOMContentLoaded', () => {
     initializeBreadcrumbs();
+    initializeImageOptimization();
+    optimizeImagePerformance();
+    initializeServiceWorker();
 });
+
+// Service Worker registration (for PWA features)
+function initializeServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('SW registered: ', registration);
+                    
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // New content is available
+                                showNotification('New content available! Refresh to update.', 'info');
+                            }
+                        });
+                    });
+                })
+                .catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
+        });
+    }
+}
 // initializeServiceWorker();

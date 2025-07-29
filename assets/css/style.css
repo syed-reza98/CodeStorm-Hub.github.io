@@ -1245,10 +1245,10 @@ section {
 .services-hero,
 .portfolio-hero,
 .contact-hero {
-  padding: var(--space-24) 0 var(--space-16);
+  padding: var(--space-16) 0 var(--space-16);
   background: linear-gradient(135deg, var(--bg-color) 0%, var(--bg-secondary) 100%);
   text-align: center;
-  margin-top: 80px;
+  margin-top: 0; /* Breadcrumb will handle spacing */
 }
 
 .page-title {
@@ -3215,6 +3215,117 @@ section {
   background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   z-index: var(--z-tooltip);
   transition: width 0.1s ease-out;
+  opacity: 0;
+  transition: opacity 0.3s ease, width 0.1s ease-out;
+}
+
+/* Image loading states */
+img.loading {
+  opacity: 0.5;
+  filter: blur(2px);
+  transition: all 0.3s ease;
+}
+
+img.loaded {
+  opacity: 1;
+  filter: blur(0);
+}
+
+img.error {
+  opacity: 0.5;
+  background: var(--bg-secondary);
+  display: inline-block;
+  padding: var(--space-4);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius);
+}
+
+/* Breadcrumb enhancements */
+.breadcrumb-nav {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--space-4) 0;
+  margin-top: 80px;
+  position: relative;
+  z-index: 1;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition-fast);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+}
+
+.breadcrumb-item a:hover {
+  color: var(--primary-color);
+  background: var(--bg-color);
+}
+
+.breadcrumb-current {
+  color: var(--text-color);
+  font-weight: 500;
+  padding: var(--space-1) var(--space-2);
+}
+
+.breadcrumb-separator {
+  margin: 0 var(--space-2);
+  color: var(--text-muted);
+  user-select: none;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress {
+    transition: none;
+  }
+  
+  img.loading,
+  img.loaded {
+    transition: none;
+  }
+  
+  .hero-particles {
+    animation: none;
+  }
+}
+
+/* Print optimizations */
+@media print {
+  .scroll-progress,
+  .breadcrumb-nav {
+    display: none;
+  }
+  
+  .hero {
+    padding-top: 0;
+  }
+  
+  .hero-title {
+    font-size: 24pt;
+    color: black !important;
+  }
+  
+  .section-title {
+    font-size: 18pt;
+    color: black !important;
+  }
 }
 
 /* Print Styles */
