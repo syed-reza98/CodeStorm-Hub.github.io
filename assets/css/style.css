@@ -133,6 +133,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Prevent scrolling when mobile menu is open */
+body.menu-open {
+  overflow: hidden;
+}
+
+/* Mobile specific styles */
+body.is-mobile .hero-particles {
+  animation-duration: 30s;
+}
+
+/* Touch active state for mobile */
+.touch-active {
+  opacity: 0.8 !important;
+  transition: opacity 0.15s ease;
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
@@ -2915,12 +2931,299 @@ section {
   }
 }
 
+/* Enhanced Mobile Responsiveness for 320px and up */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--space-3);
+  }
+  
+  /* Enhanced Hero Section for mobile */
+  .hero {
+    min-height: 80vh;
+    padding-top: 60px;
+  }
+  
+  .hero-title {
+    font-size: var(--text-3xl);
+    line-height: 1.2;
+  }
+  
+  .hero-description {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-6);
+  }
+  
+  .hero-buttons {
+    gap: var(--space-3);
+  }
+  
+  .hero-buttons .btn {
+    width: 100%;
+    max-width: 280px;
+    padding: var(--space-3) var(--space-4);
+  }
+  
+  .hero-stats {
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+  
+  .stat {
+    padding: var(--space-4);
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+  }
+  
+  /* Services grid mobile optimization */
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  
+  .service-card {
+    padding: var(--space-6);
+  }
+  
+  /* Portfolio grid mobile optimization */
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  
+  .portfolio-actions {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .portfolio-actions .btn {
+    width: 100%;
+  }
+  
+  /* Testimonials mobile optimization */
+  .testimonial-author {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  
+  .author-info {
+    text-align: center;
+  }
+  
+  .testimonial-text p {
+    font-size: var(--text-lg);
+  }
+  
+  /* Page titles and sections */
+  .page-title {
+    font-size: var(--text-3xl);
+  }
+  
+  .page-description {
+    font-size: var(--text-base);
+  }
+  
+  .section-title {
+    font-size: var(--text-3xl);
+  }
+  
+  .section-description {
+    font-size: var(--text-base);
+  }
+  
+  /* Form improvements for mobile */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  
+  .form-input,
+  .form-select,
+  .form-textarea {
+    padding: var(--space-4);
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Button improvements for mobile */
+  .btn {
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--text-base);
+    min-height: 44px; /* Improve touch targets */
+  }
+  
+  .btn-sm {
+    padding: var(--space-3) var(--space-5);
+    min-height: 40px;
+  }
+  
+  .btn-lg {
+    padding: var(--space-5) var(--space-8);
+    min-height: 48px;
+  }
+}
+
+/* Disabled button styles */
+.btn-disabled,
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-disabled:hover,
+.btn:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Social link disabled state */
+.social-link.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Enhanced touch targets for mobile */
+@media (max-width: 768px) {
+  .nav-link {
+    padding: var(--space-4) 0;
+    font-size: var(--text-lg);
+  }
+  
+  .theme-toggle {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .mobile-menu-btn {
+    width: 48px;
+    height: 48px;
+    padding: var(--space-3);
+  }
+  
+  .testimonial-nav-btn {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* Improve spacing for mobile */
+  section {
+    padding: var(--space-16) 0;
+  }
+  
+  .section-header {
+    margin-bottom: var(--space-12);
+  }
+  
+  /* Portfolio filter mobile scrolling */
+  .filter-tabs {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .filter-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Enhanced focus states for accessibility */
+  .nav-link:focus,
+  .btn:focus,
+  .theme-toggle:focus,
+  .mobile-menu-btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+  
+  /* Loading spinner mobile */
+  .loading-spinner {
+    backdrop-filter: blur(5px);
+  }
+  
+  .spinner {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Typography scaling for very small screens */
+@media (max-width: 360px) {
+  html {
+    font-size: 14px;
+  }
+  
+  .hero-title {
+    font-size: calc(var(--text-2xl) + 0.5rem);
+  }
+  
+  .cta-title {
+    font-size: var(--text-3xl);
+  }
+}
+
+/* Landscape mobile optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero {
+    min-height: 70vh;
+    padding-top: 80px;
+  }
+  
+  .hero-content {
+    gap: var(--space-6);
+  }
+  
+  .hero-stats {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--space-6);
+  }
+}
+
+/* Performance optimizations for mobile */
+@media (max-width: 768px) {
+  /* Reduce animation complexity on mobile */
+  .hero-particles {
+    animation-duration: 30s;
+  }
+  
+  /* Simplify transforms for better performance */
+  .service-card:hover,
+  .portfolio-item:hover,
+  .team-member:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Reduce blur effects on mobile for performance */
+  .header {
+    backdrop-filter: blur(5px);
+  }
+  
+  .modal-overlay {
+    backdrop-filter: blur(3px);
+  }
+}
+
+/* Scroll progress indicator */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  z-index: var(--z-tooltip);
+  transition: width 0.1s ease-out;
+}
+
 /* Print Styles */
 @media print {
   .header,
   .footer,
   .back-to-top,
-  .loading-spinner {
+  .loading-spinner,
+  .scroll-progress {
     display: none !important;
   }
   
