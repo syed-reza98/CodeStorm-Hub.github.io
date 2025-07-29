@@ -1,0 +1,219 @@
+---
+layout: default
+title: Page Not Found
+description: The page you're looking for could not be found. Return to CodeStorm Hub homepage or explore our services.
+keywords: 404, page not found, error
+permalink: /404.html
+---
+
+<!-- 404 Hero Section -->
+<section class="error-hero">
+    <div class="container">
+        <div class="error-content" data-aos="fade-up">
+            <div class="error-illustration">
+                <div class="error-code">404</div>
+                <div class="error-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            <h1 class="error-title">Page Not Found</h1>
+            <p class="error-description">
+                Oops! The page you're looking for seems to have wandered off into the digital void. 
+                Don't worry, even the best code sometimes takes unexpected paths.
+            </p>
+            <div class="error-actions">
+                <a href="{{ '/' | relative_url }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-home"></i>
+                    Back to Home
+                </a>
+                <a href="{{ '/contact/' | relative_url }}" class="btn btn-outline btn-lg">
+                    <i class="fas fa-envelope"></i>
+                    Contact Support
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Navigation Section -->
+<section class="error-navigation">
+    <div class="container">
+        <div class="error-nav-content" data-aos="fade-up" data-aos-delay="100">
+            <h2 class="error-nav-title">Maybe you're looking for:</h2>
+            <div class="error-nav-grid">
+                <a href="{{ '/services/' | relative_url }}" class="error-nav-item">
+                    <div class="error-nav-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3>Our Services</h3>
+                    <p>Explore our technology solutions</p>
+                </a>
+                <a href="{{ '/portfolio/' | relative_url }}" class="error-nav-item">
+                    <div class="error-nav-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>Portfolio</h3>
+                    <p>View our completed projects</p>
+                </a>
+                <a href="{{ '/about/' | relative_url }}" class="error-nav-item">
+                    <div class="error-nav-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>About Us</h3>
+                    <p>Learn about our team</p>
+                </a>
+                <a href="{{ '/contact/' | relative_url }}" class="error-nav-item">
+                    <div class="error-nav-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Contact</h3>
+                    <p>Get in touch with us</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* 404 Page Styles */
+.error-hero {
+    padding: var(--space-24) 0;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--white);
+    text-align: center;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+}
+
+.error-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.error-illustration {
+    position: relative;
+    margin-bottom: var(--space-8);
+}
+
+.error-code {
+    font-size: clamp(4rem, 8vw, 8rem);
+    font-weight: 700;
+    font-family: var(--font-heading);
+    opacity: 0.1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.error-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-4);
+    position: relative;
+    z-index: 1;
+}
+
+.error-title {
+    font-size: var(--text-4xl);
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+    font-family: var(--font-heading);
+}
+
+.error-description {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-8);
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.error-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.error-navigation {
+    padding: var(--space-20) 0;
+    background: var(--bg-color);
+}
+
+.error-nav-title {
+    text-align: center;
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    margin-bottom: var(--space-12);
+    color: var(--text-color);
+}
+
+.error-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-6);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.error-nav-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: var(--transition);
+    display: block;
+}
+
+.error-nav-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.error-nav-icon {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: var(--space-3);
+}
+
+.error-nav-item h3 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+    color: var(--text-color);
+}
+
+.error-nav-item p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .error-hero {
+        padding: var(--space-16) 0;
+        min-height: 60vh;
+    }
+    
+    .error-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .error-actions .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .error-nav-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+}
+</style>
