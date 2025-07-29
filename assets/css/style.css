@@ -83,9 +83,9 @@
 
 /* Dark Theme Variables */
 [data-theme="dark"] {
-  --text-color: var(--gray-100);
-  --text-secondary: var(--gray-300);
-  --text-muted: var(--gray-400);
+  --text-color: #f9fafb;
+  --text-secondary: #e5e7eb;
+  --text-muted: #9ca3af;
   --bg-color: var(--gray-900);
   --bg-secondary: var(--gray-800);
   --bg-tertiary: var(--gray-700);
@@ -97,7 +97,7 @@
 [data-theme="light"] {
   --text-color: var(--gray-900);
   --text-secondary: var(--gray-700);
-  --text-muted: var(--gray-500);
+  --text-muted: var(--gray-600);
   --bg-color: var(--white);
   --bg-secondary: var(--gray-50);
   --bg-tertiary: var(--gray-100);
@@ -2674,6 +2674,244 @@ section {
   text-decoration: underline;
 }
 
+/* Loading States and Micro-interactions */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+/* Card hover effects */
+.service-card,
+.portfolio-item,
+.team-member {
+  transition: var(--transition);
+}
+
+.service-card:hover,
+.portfolio-item:hover,
+.team-member:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Loading skeleton for images */
+.image-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--gray-200) 25%,
+    var(--gray-100) 50%,
+    var(--gray-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Form loading states */
+.form-group.loading .form-input,
+.form-group.loading .form-select,
+.form-group.loading .form-textarea {
+  background-image: linear-gradient(
+    90deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: input-shimmer 1.5s infinite;
+}
+
+@keyframes input-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Progress indicator */
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background-color: var(--gray-200);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: var(--space-2) 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+/* Toast notifications */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-tooltip);
+  transform: translateX(100%);
+  opacity: 0;
+  transition: var(--transition);
+  max-width: 400px;
+}
+
+.toast.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.toast.success {
+  border-left: 4px solid var(--success-color);
+}
+
+.toast.error {
+  border-left: 4px solid var(--error-color);
+}
+
+.toast.warning {
+  border-left: 4px solid var(--warning-color);
+}
+
+.toast-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.toast-content strong {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.toast-content p {
+  font-size: var(--text-sm);
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.toast-close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+.toast-close:hover {
+  color: var(--text-color);
+  background: var(--bg-secondary);
+}
+
+/* Pulse animation for important elements */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+/* Fade in animation for content */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scale animation for buttons */
+.btn:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+/* Focus visible improvements for accessibility */
+.btn:focus-visible,
+.form-input:focus-visible,
+.form-select:focus-visible,
+.form-textarea:focus-visible,
+.theme-toggle:focus-visible,
+.mobile-menu-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .hero-particles {
+    animation: none;
+  }
+  
+  .scroll-progress {
+    transition: none;
+  }
+}
+
 .checkbox-container {
   display: flex;
   align-items: flex-start;
@@ -3363,6 +3601,76 @@ section {
   .modal-overlay {
     backdrop-filter: blur(3px);
   }
+  
+  /* Enhanced form styles for mobile */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: var(--space-4);
+    min-height: 44px; /* Better touch target */
+  }
+  
+  .form-textarea {
+    min-height: 120px;
+  }
+  
+  .btn {
+    min-height: 44px;
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--text-base);
+  }
+  
+  .btn-lg {
+    min-height: 48px;
+    padding: var(--space-5) var(--space-8);
+  }
+  
+  /* Better spacing for mobile forms */
+  .contact-form-container {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+  
+  .form-sidebar {
+    order: -1; /* Show sidebar before form on mobile */
+  }
+  
+  /* Improved mobile navigation */
+  .navbar-menu.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .navbar-nav {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .navbar-actions {
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: center;
+    margin-top: var(--space-6);
+  }
+  
+  /* Better mobile hero section */
+  .hero-buttons {
+    gap: var(--space-3);
+    width: 100%;
+  }
+  
+  .hero-buttons .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
 }
 
 /* Scroll progress indicator */

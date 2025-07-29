@@ -751,11 +751,8 @@ function initializeContactForm() {
             // Simulate form submission (replace with actual endpoint)
             await simulateFormSubmission(new FormData(contactForm));
             
-            // Show success message
-            if (successMessage) {
-                successMessage.classList.remove('hidden');
-                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+            // Show success toast
+            showToast('Message sent successfully! We\'ll get back to you soon.', 'success');
             
             // Reset form
             contactForm.reset();
@@ -768,12 +765,8 @@ function initializeContactForm() {
         } catch (error) {
             console.error('Form submission error:', error);
             
-            // Show error message
-            if (errorMessage) {
-                errorMessage.classList.remove('hidden');
-                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            
+            // Show error toast
+            showToast('Sorry, there was an error sending your message. Please try again or contact us directly.', 'error');
         } finally {
             // Reset button state
             submitButton.disabled = false;
@@ -1836,4 +1829,159 @@ function initializeCharacterCounters() {
 // Initialize character counters when DOM is ready
 domReady(() => {
     initializeCharacterCounters();
+    initializeMicroInteractions();
+    initializeLoadingStates();
+    initializeToastNotifications();
 });
+
+// Micro-interactions and animations
+function initializeMicroInteractions() {
+    // Add fade-in animation to elements
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const fadeInObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+                fadeInObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe elements for fade-in animation
+    document.querySelectorAll('.service-card, .portfolio-item, .team-member, .testimonial, .stat').forEach(el => {
+        fadeInObserver.observe(el);
+    });
+    
+    // Add pulse animation to CTA buttons
+    const ctaButtons = document.querySelectorAll('.cta-btn, .hero-buttons .btn-primary');
+    ctaButtons.forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+            btn.classList.add('pulse');
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+            btn.classList.remove('pulse');
+        });
+    });
+    
+    // Add touch feedback for mobile
+    if ('ontouchstart' in window) {
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.matches('.btn, .nav-link, .card')) {
+                e.target.classList.add('touch-active');
+            }
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            if (e.target.matches('.btn, .nav-link, .card')) {
+                setTimeout(() => {
+                    e.target.classList.remove('touch-active');
+                }, 150);
+            }
+        });
+    }
+}
+
+// Loading states management
+function initializeLoadingStates() {
+    // Image loading skeleton
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+        if (!img.complete) {
+            img.classList.add('image-skeleton');
+            
+            img.addEventListener('load', () => {
+                img.classList.remove('image-skeleton');
+            });
+            
+            img.addEventListener('error', () => {
+                img.classList.remove('image-skeleton');
+                img.style.display = 'none';
+            });
+        }
+    });
+    
+    // Form loading states
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', () => {
+            const formGroups = form.querySelectorAll('.form-group');
+            formGroups.forEach(group => {
+                group.classList.add('loading');
+            });
+        });
+    });
+}
+
+// Toast notification system
+function initializeToastNotifications() {
+    window.showToast = function(message, type = 'info', duration = 5000) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+            <div class="toast-content">
+                <strong>${type.charAt(0).toUpperCase() + type.slice(1)}</strong>
+                <p>${message}</p>
+            </div>
+            <button class="toast-close" aria-label="Close notification">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Show toast
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+        
+        // Close button functionality
+        const closeBtn = toast.querySelector('.toast-close');
+        closeBtn.addEventListener('click', () => {
+            hideToast(toast);
+        });
+        
+        // Auto-hide after duration
+        setTimeout(() => {
+            hideToast(toast);
+        }, duration);
+    };
+    
+    function hideToast(toast) {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }
+}
+
+// Progress bar utility
+function createProgressBar(container, initialValue = 0) {
+    const progressBar = document.createElement('div');
+    progressBar.className = 'progress-bar';
+    
+    const progressFill = document.createElement('div');
+    progressFill.className = 'progress-fill';
+    progressFill.style.width = `${initialValue}%`;
+    
+    progressBar.appendChild(progressFill);
+    container.appendChild(progressBar);
+    
+    return {
+        update: (value) => {
+            progressFill.style.width = `${Math.min(100, Math.max(0, value))}%`;
+        },
+        remove: () => {
+            if (progressBar.parentNode) {
+                progressBar.parentNode.removeChild(progressBar);
+            }
+        }
+    };
+}

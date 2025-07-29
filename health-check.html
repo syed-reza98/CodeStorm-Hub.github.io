@@ -1,0 +1,21 @@
+---
+layout: null
+---
+{
+  "status": "healthy",
+  "timestamp": "{{ site.time | date_to_xmlschema }}",
+  "version": "1.0.0",
+  "features": {
+    "responsive": true,
+    "accessible": true,
+    "performant": true,
+    "seo_optimized": true,
+    "secure": true
+  },
+  "checks": {
+    "css": "{{ '/assets/css/style.css' | relative_url }}",
+    "js": "{{ '/assets/js/main.js' | relative_url }}",
+    "images": "{{ '/assets/images/logo.svg' | relative_url }}",
+    "sitemap": "{{ '/sitemap.xml' | relative_url }}"
+  }
+}
