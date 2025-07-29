@@ -1,18 +1,54 @@
 // Main JavaScript file for CodeStorm Hub website
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all components
-    initializeNavigation();
-    initializeThemeToggle();
-    initializeScrollEffects();
-    initializeAnimations();
-    initializeTestimonialSlider();
-    initializeFormHandlers();
-    initializeLoadingSpinner();
-    initializeAccessibility();
-    initializePortfolioFilter();
-    initializeContactForm();
-    initializeMobileEnhancements();
-    initializeScrollProgress();
+// Performance optimized with debouncing, throttling, and efficient event handling
+
+// Utility functions for performance optimization
+function debounce(func, delay) {
+    let timeoutId;
+    return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+function throttle(func, delay) {
+    let inProgress = false;
+    return function (...args) {
+        if (inProgress) return;
+        inProgress = true;
+        func.apply(this, args);
+        setTimeout(() => inProgress = false, delay);
+    };
+}
+
+// Efficient DOM ready check
+function domReady(callback) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', callback);
+    } else {
+        callback();
+    }
+}
+
+// Initialize all components when DOM is ready
+domReady(function() {
+    // Initialize components with error handling
+    try {
+        initializeNavigation();
+        initializeThemeToggle();
+        initializeScrollEffects();
+        initializeAnimations();
+        initializeTestimonialSlider();
+        initializeFormHandlers();
+        initializeLoadingSpinner();
+        initializeAccessibility();
+        initializePortfolioFilter();
+        initializeContactForm();
+        initializeMobileEnhancements();
+        initializeScrollProgress();
+        initializePerformanceOptimizations();
+    } catch (error) {
+        console.error('Error initializing components:', error);
+    }
 });
 
 // Enhanced navigation functionality with mobile improvements
@@ -103,7 +139,8 @@ function initializeNavigation() {
         let lastScrollY = window.scrollY;
         let ticking = false;
         
-        function updateHeader() {
+        // Enhanced header scroll effect with better performance
+        const updateHeader = throttle(() => {
             const currentScrollY = window.scrollY;
             
             if (currentScrollY > 100) {
@@ -119,15 +156,9 @@ function initializeNavigation() {
             }
             
             lastScrollY = currentScrollY;
-            ticking = false;
-        }
+        }, 16); // 60fps throttling
         
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(updateHeader);
-                ticking = true;
-            }
-        });
+        window.addEventListener('scroll', updateHeader, { passive: true });
     }
     
     // Enhanced smooth scrolling for anchor links
@@ -674,9 +705,26 @@ function initializeContactForm() {
     const submitButton = contactForm.querySelector('.form-submit');
     const submitText = submitButton.querySelector('.submit-text');
     const submitLoading = submitButton.querySelector('.submit-loading');
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('general-error');
+    
+    // Real-time validation
+    const formFields = contactForm.querySelectorAll('.form-input, .form-select, .form-textarea, .form-checkbox');
+    formFields.forEach(field => {
+        field.addEventListener('blur', () => validateField(field));
+        field.addEventListener('input', debounce(() => {
+            if (field.classList.contains('error')) {
+                validateField(field);
+            }
+        }, 300));
+    });
     
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        // Hide previous messages
+        if (successMessage) successMessage.classList.add('hidden');
+        if (errorMessage) errorMessage.classList.add('hidden');
         
         // Clear previous errors
         clearFormErrors(contactForm);
@@ -685,9 +733,48 @@ function initializeContactForm() {
         const isValid = validateContactForm(contactForm);
         
         if (!isValid) {
-            showNotification('Please correct the errors in the form', 'error');
+            // Focus on first error field
+            const firstError = contactForm.querySelector('.error');
+            if (firstError) {
+                firstError.focus();
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
             return;
         }
+        
+        // Show loading state
+        submitButton.disabled = true;
+        submitText.classList.add('hidden');
+        submitLoading.classList.remove('hidden');
+        
+        try {
+            // Simulate form submission (replace with actual endpoint)
+            await simulateFormSubmission(new FormData(contactForm));
+            
+            // Show success toast
+            showToast('Message sent successfully! We\'ll get back to you soon.', 'success');
+            
+            // Reset form
+            contactForm.reset();
+            
+            // Clear validation states
+            contactForm.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
+                field.classList.remove('error', 'success');
+            });
+            
+        } catch (error) {
+            console.error('Form submission error:', error);
+            
+            // Show error toast
+            showToast('Sorry, there was an error sending your message. Please try again or contact us directly.', 'error');
+        } finally {
+            // Reset button state
+            submitButton.disabled = false;
+            submitText.classList.remove('hidden');
+            submitLoading.classList.add('hidden');
+        }
+    });
+}
         
         // Show loading state
         submitText.classList.add('hidden');
@@ -753,14 +840,26 @@ function initializeContactForm() {
 
 function validateContactForm(form) {
     let isValid = true;
+    const errors = [];
+    
+    // Clear previous validation states
+    form.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
+        field.classList.remove('error', 'success');
+    });
     
     // Required fields validation
     const requiredFields = form.querySelectorAll('[required]');
     requiredFields.forEach(field => {
         if (!validateField(field)) {
             isValid = false;
+            errors.push(`${field.name}: ${getFieldErrorMessage(field)}`);
         }
     });
+    
+    // Log validation results for debugging
+    if (!isValid) {
+        console.log('Form validation failed:', errors);
+    }
     
     return isValid;
 }
@@ -776,32 +875,94 @@ function validateField(field) {
     // Required field validation
     if (field.hasAttribute('required') && !value) {
         isValid = false;
-        errorMessage = 'This field is required';
+        errorMessage = getRequiredFieldMessage(fieldName);
     }
     
-    // Email validation
+    // Email validation (enhanced)
     else if (fieldName === 'email' && value) {
         if (!isValidEmail(value)) {
             isValid = false;
-            errorMessage = 'Please enter a valid email address';
+            errorMessage = 'Please enter a valid email address (e.g., name@domain.com)';
         }
     }
     
-    // Phone validation
+    // Phone validation (more flexible)
     else if (fieldName === 'phone' && value) {
-        const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
+        const phoneRegex = /^[\+]?[\d\s\(\)\-\.]{10,}$/;
         if (!phoneRegex.test(value)) {
             isValid = false;
-            errorMessage = 'Please enter a valid phone number';
+            errorMessage = 'Please enter a valid phone number (at least 10 digits)';
         }
     }
     
-    // Name validation
+    // Name validation (enhanced)
     else if ((fieldName === 'firstName' || fieldName === 'lastName') && value) {
         if (value.length < 2) {
             isValid = false;
             errorMessage = 'Name must be at least 2 characters long';
+        } else if (!/^[a-zA-Z\s\-\'\.]+$/.test(value)) {
+            isValid = false;
+            errorMessage = 'Name can only contain letters, spaces, hyphens, and apostrophes';
         }
+    }
+    
+    // Message validation (enhanced)
+    else if (fieldName === 'message' && value) {
+        if (value.length < 50) {
+            isValid = false;
+            errorMessage = `Message must be at least 50 characters long (currently ${value.length})`;
+        } else if (value.length > 1000) {
+            isValid = false;
+            errorMessage = `Message must be no more than 1000 characters (currently ${value.length})`;
+        }
+    }
+    
+    // Project type validation
+    else if (fieldName === 'projectType' && field.hasAttribute('required') && !value) {
+        isValid = false;
+        errorMessage = 'Please select a project type';
+    }
+    
+    // Privacy checkbox validation
+    else if (fieldName === 'privacy' && field.hasAttribute('required') && !field.checked) {
+        isValid = false;
+        errorMessage = 'You must agree to the Privacy Policy and Terms of Service';
+    }
+    
+    // Update field appearance and error message
+    if (errorElement) {
+        if (isValid) {
+            errorElement.textContent = '';
+            errorElement.classList.remove('visible');
+            field.classList.remove('error');
+            field.classList.add('success');
+        } else {
+            errorElement.textContent = errorMessage;
+            errorElement.classList.add('visible');
+            field.classList.add('error');
+            field.classList.remove('success');
+        }
+    }
+    
+    return isValid;
+}
+
+function getRequiredFieldMessage(fieldName) {
+    const messages = {
+        'firstName': 'First name is required',
+        'lastName': 'Last name is required',
+        'email': 'Email address is required',
+        'message': 'Project description is required',
+        'projectType': 'Please select a project type',
+        'privacy': 'You must agree to the Privacy Policy and Terms of Service'
+    };
+    return messages[fieldName] || 'This field is required';
+}
+
+function getFieldErrorMessage(field) {
+    const errorElement = document.getElementById(`${field.name}-error`);
+    return errorElement ? errorElement.textContent : 'Invalid value';
+}
     }
     
     // Message validation
@@ -1471,8 +1632,104 @@ function optimizeImagePerformance() {
     });
 }
 
+// Performance optimization functions
+function initializePerformanceOptimizations() {
+    // Preload critical resources
+    preloadCriticalResources();
+    
+    // Optimize images
+    optimizeImages();
+    
+    // Initialize service worker if supported
+    initializeServiceWorker();
+    
+    // Add connection-aware loading
+    initializeConnectionAwareLoading();
+}
+
+function preloadCriticalResources() {
+    const criticalResources = [
+        '/assets/css/style.css',
+        '/assets/js/main.js',
+        '/assets/images/logo.svg'
+    ];
+    
+    criticalResources.forEach(resource => {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        
+        if (resource.endsWith('.css')) {
+            link.as = 'style';
+        } else if (resource.endsWith('.js')) {
+            link.as = 'script';
+        } else if (resource.includes('images')) {
+            link.as = 'image';
+        }
+        
+        link.href = resource;
+        document.head.appendChild(link);
+    });
+}
+
+function optimizeImages() {
+    // Add responsive image loading
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+        // Add loading attribute if not present
+        if (!img.hasAttribute('loading')) {
+            img.loading = 'lazy';
+        }
+        
+        // Add decoding attribute for better performance
+        if (!img.hasAttribute('decoding')) {
+            img.decoding = 'async';
+        }
+        
+        // Add error handling
+        img.addEventListener('error', function() {
+            console.warn(`Failed to load image: ${this.src}`);
+            this.style.display = 'none';
+        });
+    });
+}
+
+function initializeServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('Service Worker registered successfully:', registration);
+            })
+            .catch(error => {
+                console.warn('Service Worker registration failed:', error);
+            });
+    }
+}
+
+function initializeConnectionAwareLoading() {
+    // Check if connection API is supported
+    if ('connection' in navigator) {
+        const connection = navigator.connection;
+        
+        // Adjust loading strategy based on connection
+        if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+            // Disable some non-critical features for slow connections
+            document.body.classList.add('slow-connection');
+            
+            // Reduce image quality
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                if (img.src && !img.src.includes('low-quality')) {
+                    // You could implement low-quality image variants here
+                    console.log('Slow connection detected, consider loading lower quality images');
+                }
+            });
+        }
+    }
+}
+
 // Initialize breadcrumbs if container exists
-document.addEventListener('DOMContentLoaded', () => {
+domReady(() => {
     initializeBreadcrumbs();
     initializeImageOptimization();
     optimizeImagePerformance();
@@ -1505,3 +1762,226 @@ function initializeServiceWorker() {
     }
 }
 // initializeServiceWorker();
+
+// Form submission simulation (replace with actual API endpoint)
+async function simulateFormSubmission(formData) {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Log form data for debugging
+    const data = {};
+    for (let [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+    console.log('Form submission data:', data);
+    
+    // Simulate random success/failure for testing
+    if (Math.random() > 0.1) { // 90% success rate
+        return { success: true, message: 'Form submitted successfully' };
+    } else {
+        throw new Error('Simulated submission failure');
+    }
+}
+
+// Utility function to clear form errors
+function clearFormErrors(form) {
+    form.querySelectorAll('.form-error').forEach(error => {
+        error.textContent = '';
+        error.classList.remove('visible');
+    });
+    
+    form.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
+        field.classList.remove('error', 'success');
+    });
+}
+
+// Enhanced email validation
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email) && email.length <= 254;
+}
+
+// Character counter for textarea
+function initializeCharacterCounters() {
+    const textareas = document.querySelectorAll('textarea[maxlength]');
+    
+    textareas.forEach(textarea => {
+        const maxLength = parseInt(textarea.getAttribute('maxlength'));
+        const counter = document.createElement('div');
+        counter.className = 'character-counter';
+        counter.textContent = `0 / ${maxLength}`;
+        
+        textarea.parentNode.appendChild(counter);
+        
+        textarea.addEventListener('input', () => {
+            const currentLength = textarea.value.length;
+            counter.textContent = `${currentLength} / ${maxLength}`;
+            
+            if (currentLength > maxLength * 0.9) {
+                counter.style.color = 'var(--warning-color)';
+            } else {
+                counter.style.color = 'var(--text-muted)';
+            }
+        });
+    });
+}
+
+// Initialize character counters when DOM is ready
+domReady(() => {
+    initializeCharacterCounters();
+    initializeMicroInteractions();
+    initializeLoadingStates();
+    initializeToastNotifications();
+});
+
+// Micro-interactions and animations
+function initializeMicroInteractions() {
+    // Add fade-in animation to elements
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const fadeInObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+                fadeInObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe elements for fade-in animation
+    document.querySelectorAll('.service-card, .portfolio-item, .team-member, .testimonial, .stat').forEach(el => {
+        fadeInObserver.observe(el);
+    });
+    
+    // Add pulse animation to CTA buttons
+    const ctaButtons = document.querySelectorAll('.cta-btn, .hero-buttons .btn-primary');
+    ctaButtons.forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+            btn.classList.add('pulse');
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+            btn.classList.remove('pulse');
+        });
+    });
+    
+    // Add touch feedback for mobile
+    if ('ontouchstart' in window) {
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.matches('.btn, .nav-link, .card')) {
+                e.target.classList.add('touch-active');
+            }
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            if (e.target.matches('.btn, .nav-link, .card')) {
+                setTimeout(() => {
+                    e.target.classList.remove('touch-active');
+                }, 150);
+            }
+        });
+    }
+}
+
+// Loading states management
+function initializeLoadingStates() {
+    // Image loading skeleton
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+        if (!img.complete) {
+            img.classList.add('image-skeleton');
+            
+            img.addEventListener('load', () => {
+                img.classList.remove('image-skeleton');
+            });
+            
+            img.addEventListener('error', () => {
+                img.classList.remove('image-skeleton');
+                img.style.display = 'none';
+            });
+        }
+    });
+    
+    // Form loading states
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', () => {
+            const formGroups = form.querySelectorAll('.form-group');
+            formGroups.forEach(group => {
+                group.classList.add('loading');
+            });
+        });
+    });
+}
+
+// Toast notification system
+function initializeToastNotifications() {
+    window.showToast = function(message, type = 'info', duration = 5000) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+            <div class="toast-content">
+                <strong>${type.charAt(0).toUpperCase() + type.slice(1)}</strong>
+                <p>${message}</p>
+            </div>
+            <button class="toast-close" aria-label="Close notification">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Show toast
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+        
+        // Close button functionality
+        const closeBtn = toast.querySelector('.toast-close');
+        closeBtn.addEventListener('click', () => {
+            hideToast(toast);
+        });
+        
+        // Auto-hide after duration
+        setTimeout(() => {
+            hideToast(toast);
+        }, duration);
+    };
+    
+    function hideToast(toast) {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }
+}
+
+// Progress bar utility
+function createProgressBar(container, initialValue = 0) {
+    const progressBar = document.createElement('div');
+    progressBar.className = 'progress-bar';
+    
+    const progressFill = document.createElement('div');
+    progressFill.className = 'progress-fill';
+    progressFill.style.width = `${initialValue}%`;
+    
+    progressBar.appendChild(progressFill);
+    container.appendChild(progressBar);
+    
+    return {
+        update: (value) => {
+            progressFill.style.width = `${Math.min(100, Math.max(0, value))}%`;
+        },
+        remove: () => {
+            if (progressBar.parentNode) {
+                progressBar.parentNode.removeChild(progressBar);
+            }
+        }
+    };
+}

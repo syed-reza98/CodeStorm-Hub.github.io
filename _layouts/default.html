@@ -54,8 +54,14 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <!-- Critical CSS (inlined) -->
+    <style>
+        {% include critical.css %}
+    </style>
+    
+    <!-- Non-critical CSS (loaded asynchronously) -->
+    <link rel="preload" href="{{ '/assets/css/style.css' | relative_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}"></noscript>
     
     <!-- Theme script (prevent FOUC) -->
     <script>
@@ -116,19 +122,89 @@
         "@type": "Organization",
         "name": "{{ site.title }}",
         "url": "{{ site.url }}",
-        "logo": "{{ site.url }}/assets/images/logo.png",
+        "logo": "{{ site.url }}/assets/images/logo.svg",
         "description": "{{ site.description }}",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "US"
+        },
         "contactPoint": {
             "@type": "ContactPoint",
             "telephone": "+1-555-123-4567",
-            "contactType": "customer service"
+            "contactType": "customer service",
+            "email": "{{ site.email }}"
         },
         "sameAs": [
             "https://twitter.com/{{ site.twitter_username }}",
             "https://www.linkedin.com/company/{{ site.linkedin_username }}",
             "https://github.com/{{ site.github_username }}"
-        ]
+        ],
+        "founder": {
+            "@type": "Person",
+            "name": "CodeStorm Hub Team"
+        },
+        "foundingDate": "2019",
+        "numberOfEmployees": "10-50",
+        "industry": "Software Development",
+        "keywords": ["software development", "web development", "mobile apps", "cloud solutions", "digital transformation"],
+        "serviceArea": {
+            "@type": "Place",
+            "name": "Worldwide"
+        },
+        "offers": {
+            "@type": "Service",
+            "serviceType": "Software Development Services",
+            "description": "Custom software development, web applications, mobile apps, and cloud solutions"
+        }
     }
     </script>
+    
+    {% if page.url == '/' %}
+    <!-- Additional homepage structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "{{ site.title }}",
+        "url": "{{ site.url }}",
+        "description": "{{ site.description }}",
+        "publisher": {
+            "@type": "Organization",
+            "name": "{{ site.title }}",
+            "logo": "{{ site.url }}/assets/images/logo.svg"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ site.url }}/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    {% endif %}
+    
+    {% if page.layout == 'post' or page.layout == 'project' %}
+    <!-- Article structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "{{ page.title }}",
+        "description": "{{ page.description | default: page.excerpt | strip_html | truncate: 160 }}",
+        "author": {
+            "@type": "Organization",
+            "name": "{{ site.title }}"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "{{ site.title }}",
+            "logo": "{{ site.url }}/assets/images/logo.svg"
+        },
+        "datePublished": "{{ page.date | date_to_xmlschema }}",
+        "dateModified": "{{ page.date | date_to_xmlschema }}",
+        "url": "{{ site.url }}{{ page.url }}",
+        "mainEntityOfPage": "{{ site.url }}{{ page.url }}"
+    }
+    </script>
+    {% endif %}
 </body>
 </html>

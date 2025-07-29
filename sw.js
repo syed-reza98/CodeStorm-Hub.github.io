@@ -1,17 +1,22 @@
 // Service Worker for CodeStorm Hub
 // Basic caching strategy for improved performance
 
-const CACHE_NAME = 'codestorm-hub-v1';
+const CACHE_NAME = 'codestorm-hub-v1.1';
 const STATIC_ASSETS = [
   '/',
   '/assets/css/style.css',
   '/assets/js/main.js',
+  '/assets/images/logo.svg',
+  '/assets/images/favicon.ico',
   '/about/',
-  '/services/',
+  '/services/', 
   '/portfolio/',
   '/contact/',
   '/404.html'
 ];
+
+const DYNAMIC_CACHE_NAME = 'codestorm-hub-dynamic-v1.1';
+const IMAGES_CACHE_NAME = 'codestorm-hub-images-v1.1';
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
@@ -34,7 +39,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
+          if (cache !== CACHE_NAME && cache !== DYNAMIC_CACHE_NAME && cache !== IMAGES_CACHE_NAME) {
             console.log('Service Worker: Deleting old cache', cache);
             return caches.delete(cache);
           }

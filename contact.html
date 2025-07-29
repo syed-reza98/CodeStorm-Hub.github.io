@@ -91,41 +91,92 @@ keywords: contact, consultation, project inquiry, technology consulting, partner
                     Tell us about your project requirements and we'll provide you with a detailed proposal and timeline.
                 </p>
                 
-                <form class="contact-form" id="contact-form" novalidate>
+                <form class="contact-form" id="contact-form" novalidate role="form" aria-labelledby="form-title">
+                    <h2 id="form-title" class="sr-only">Contact Form</h2>
+                    
                     <div class="form-row">
                         <div class="form-group">
                             <label for="firstName" class="form-label">First Name *</label>
-                            <input type="text" id="firstName" name="firstName" class="form-input" required>
-                            <span class="form-error" id="firstName-error"></span>
+                            <input 
+                                type="text" 
+                                id="firstName" 
+                                name="firstName" 
+                                class="form-input" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="firstName-error"
+                                autocomplete="given-name"
+                            >
+                            <span class="form-error" id="firstName-error" role="alert" aria-live="polite"></span>
                         </div>
                         <div class="form-group">
                             <label for="lastName" class="form-label">Last Name *</label>
-                            <input type="text" id="lastName" name="lastName" class="form-input" required>
-                            <span class="form-error" id="lastName-error"></span>
+                            <input 
+                                type="text" 
+                                id="lastName" 
+                                name="lastName" 
+                                class="form-input" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="lastName-error"
+                                autocomplete="family-name"
+                            >
+                            <span class="form-error" id="lastName-error" role="alert" aria-live="polite"></span>
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="email" class="form-label">Email Address *</label>
-                            <input type="email" id="email" name="email" class="form-input" required>
-                            <span class="form-error" id="email-error"></span>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                class="form-input" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="email-error email-help"
+                                autocomplete="email"
+                            >
+                            <small id="email-help" class="form-help">We'll never share your email with anyone else.</small>
+                            <span class="form-error" id="email-error" role="alert" aria-live="polite"></span>
                         </div>
                         <div class="form-group">
                             <label for="phone" class="form-label">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" class="form-input">
-                            <span class="form-error" id="phone-error"></span>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                class="form-input"
+                                aria-describedby="phone-error phone-help"
+                                autocomplete="tel"
+                            >
+                            <small id="phone-help" class="form-help">Optional - for quicker response</small>
+                            <span class="form-error" id="phone-error" role="alert" aria-live="polite"></span>
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="company" class="form-label">Company Name</label>
-                        <input type="text" id="company" name="company" class="form-input">
+                        <input 
+                            type="text" 
+                            id="company" 
+                            name="company" 
+                            class="form-input"
+                            autocomplete="organization"
+                        >
                     </div>
                     
                     <div class="form-group">
                         <label for="projectType" class="form-label">Project Type *</label>
-                        <select id="projectType" name="projectType" class="form-select" required>
+                        <select 
+                            id="projectType" 
+                            name="projectType" 
+                            class="form-select" 
+                            required 
+                            aria-required="true"
+                            aria-describedby="projectType-error"
+                        >
                             <option value="">Select a project type</option>
                             <option value="web-development">Web Development</option>
                             <option value="mobile-app">Mobile App Development</option>
@@ -134,12 +185,17 @@ keywords: contact, consultation, project inquiry, technology consulting, partner
                             <option value="maintenance">Maintenance & Support</option>
                             <option value="other">Other</option>
                         </select>
-                        <span class="form-error" id="projectType-error"></span>
+                        <span class="form-error" id="projectType-error" role="alert" aria-live="polite"></span>
                     </div>
                     
                     <div class="form-group">
                         <label for="budget" class="form-label">Project Budget</label>
-                        <select id="budget" name="budget" class="form-select">
+                        <select 
+                            id="budget" 
+                            name="budget" 
+                            class="form-select"
+                            aria-describedby="budget-help"
+                        >
                             <option value="">Select budget range</option>
                             <option value="under-5k">Under $5,000</option>
                             <option value="5k-15k">$5,000 - $15,000</option>
@@ -147,11 +203,17 @@ keywords: contact, consultation, project inquiry, technology consulting, partner
                             <option value="50k-100k">$50,000 - $100,000</option>
                             <option value="over-100k">Over $100,000</option>
                         </select>
+                        <small id="budget-help" class="form-help">This helps us provide better recommendations</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="timeline" class="form-label">Project Timeline</label>
-                        <select id="timeline" name="timeline" class="form-select">
+                        <select 
+                            id="timeline" 
+                            name="timeline" 
+                            class="form-select"
+                            aria-describedby="timeline-help"
+                        >
                             <option value="">Select timeline</option>
                             <option value="asap">ASAP</option>
                             <option value="1-3-months">1-3 months</option>
@@ -159,38 +221,86 @@ keywords: contact, consultation, project inquiry, technology consulting, partner
                             <option value="6-12-months">6-12 months</option>
                             <option value="flexible">Flexible</option>
                         </select>
+                        <small id="timeline-help" class="form-help">When would you like to start?</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="message" class="form-label">Project Description *</label>
-                        <textarea id="message" name="message" class="form-textarea" rows="6" 
-                                  placeholder="Please describe your project requirements, goals, and any specific features you need..." required></textarea>
-                        <span class="form-error" id="message-error"></span>
+                        <textarea 
+                            id="message" 
+                            name="message" 
+                            class="form-textarea" 
+                            rows="6"
+                            required 
+                            aria-required="true"
+                            aria-describedby="message-error message-help"
+                            placeholder="Please describe your project requirements, goals, and any specific features you need..."
+                            minlength="50"
+                            maxlength="1000"
+                        ></textarea>
+                        <small id="message-help" class="form-help">Please provide at least 50 characters describing your project.</small>
+                        <span class="form-error" id="message-error" role="alert" aria-live="polite"></span>
                     </div>
                     
                     <div class="form-group">
                         <label class="checkbox-container">
-                            <input type="checkbox" id="newsletter" name="newsletter" class="form-checkbox">
-                            <span class="checkmark"></span>
+                            <input 
+                                type="checkbox" 
+                                id="newsletter" 
+                                name="newsletter" 
+                                class="form-checkbox"
+                                aria-describedby="newsletter-help"
+                            >
+                            <span class="checkmark" aria-hidden="true"></span>
                             Subscribe to our newsletter for updates and insights
                         </label>
+                        <small id="newsletter-help" class="form-help">Optional - receive monthly updates about technology trends and our latest projects.</small>
                     </div>
                     
                     <div class="form-group">
                         <label class="checkbox-container">
-                            <input type="checkbox" id="privacy" name="privacy" class="form-checkbox" required>
-                            <span class="checkmark"></span>
-                            I agree to the <a href="/privacy-policy/" target="_blank">Privacy Policy</a> and <a href="/terms-of-service/" target="_blank">Terms of Service</a> *
+                            <input 
+                                type="checkbox" 
+                                id="privacy" 
+                                name="privacy" 
+                                class="form-checkbox" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="privacy-error"
+                            >
+                            <span class="checkmark" aria-hidden="true"></span>
+                            I agree to the <a href="/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a> and <a href="/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a> *
                         </label>
-                        <span class="form-error" id="privacy-error"></span>
+                        <span class="form-error" id="privacy-error" role="alert" aria-live="polite"></span>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary btn-lg btn-block form-submit">
-                        <span class="submit-text">Send Message</span>
-                        <span class="submit-loading hidden">
-                            <i class="fas fa-spinner fa-spin"></i> Sending...
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary btn-lg btn-block form-submit"
+                        aria-describedby="submit-help"
+                    >
+                        <span class="submit-text">
+                            <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                            Send Message
+                        </span>
+                        <span class="submit-loading hidden" aria-hidden="true">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> 
+                            Sending...
                         </span>
                     </button>
+                    <small id="submit-help" class="form-help">We'll respond within 24 hours during business days.</small>
+                    
+                    <!-- Form submission status messages -->
+                    <div class="form-status" role="status" aria-live="polite">
+                        <div class="success-message hidden" id="success-message">
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
+                            <strong>Message sent successfully!</strong> We'll get back to you soon.
+                        </div>
+                        <div class="error-message hidden" id="general-error">
+                            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                            <strong>Sorry, there was an error.</strong> Please try again or contact us directly.
+                        </div>
+                    </div>
                 </form>
             </div>
             
