@@ -1293,11 +1293,25 @@ function initializeMobileEnhancements() {
     
     // Prevent iOS bounce scrolling
     if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-        document.addEventListener('touchmove', (e) => {
+        let touchMoveHandler = (e) => {
             if (e.scale && e.scale !== 1) {
                 e.preventDefault();
             }
-        }, { passive: false });
+        };
+        
+        // Add the listener with passive: true by default
+        document.addEventListener('touchmove', touchMoveHandler, { passive: true });
+        
+        // Monitor for conditions where passive: false is required
+        document.addEventListener('gesturestart', () => {
+            document.removeEventListener('touchmove', touchMoveHandler, { passive: true });
+            document.addEventListener('touchmove', touchMoveHandler, { passive: false });
+        });
+        
+        document.addEventListener('gestureend', () => {
+            document.removeEventListener('touchmove', touchMoveHandler, { passive: false });
+            document.addEventListener('touchmove', touchMoveHandler, { passive: true });
+        });
     }
 }
 
