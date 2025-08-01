@@ -1,0 +1,44 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fitnessGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="400" height="300" fill="url(#fitnessGrad)"/>
+  
+  <!-- Mobile app mockup -->
+  <g transform="translate(160, 50)">
+    <rect x="0" y="0" width="80" height="140" rx="10" fill="#1f2937"/>
+    <rect x="6" y="12" width="68" height="116" rx="4" fill="#111827"/>
+    
+    <!-- Fitness chart -->
+    <g stroke="white" stroke-width="2" fill="none" transform="translate(10, 20)">
+      <path d="M0 80 Q15 60 30 70 Q45 50 60 40"/>
+    </g>
+    
+    <!-- Activity rings -->
+    <g transform="translate(40, 70)">
+      <circle r="15" fill="none" stroke="rgba(239,68,68,0.3)" stroke-width="3"/>
+      <circle r="15" fill="none" stroke="#ef4444" stroke-width="3" 
+              stroke-dasharray="94.2" stroke-dashoffset="23.55" transform="rotate(-90)"/>
+      
+      <circle r="10" fill="none" stroke="rgba(16,185,129,0.3)" stroke-width="2"/>
+      <circle r="10" fill="none" stroke="#10b981" stroke-width="2" 
+              stroke-dasharray="62.8" stroke-dashoffset="15.7" transform="rotate(-90)"/>
+    </g>
+    
+    <!-- Stats -->
+    <text x="40" y="115" text-anchor="middle" fill="white" font-family="Arial" font-size="8">2,847 steps</text>
+  </g>
+  
+  <!-- Floating elements -->
+  <g fill="rgba(255,255,255,0.3)">
+    <circle cx="80" cy="120" r="6"/>
+    <circle cx="320" cy="180" r="8"/>
+  </g>
+  
+  <!-- Text overlay -->
+  <text x="200" y="280" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Fitness Tracking App</text>
+</svg>
