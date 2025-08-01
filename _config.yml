@@ -29,13 +29,6 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
-  - README.md
-  - CSS_FIX_SUMMARY.md
-  - IMPLEMENTATION_SUMMARY.md
-  - TESTING_REPORT.md
-  - FINAL_DEPLOYMENT_REPORT.md
-  - bug_fix_and_improvemnts.md
-  - "*.md"
 
 # Collections
 collections:
