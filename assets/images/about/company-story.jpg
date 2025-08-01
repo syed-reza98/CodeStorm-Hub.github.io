@@ -1,0 +1,46 @@
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="companyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="600" height="400" fill="url(#companyGrad)"/>
+  
+  <!-- Team collaboration scene -->
+  <g transform="translate(100, 150)">
+    <!-- Conference table -->
+    <ellipse cx="200" cy="120" rx="150" ry="60" fill="rgba(255,255,255,0.2)"/>
+    
+    <!-- People around table (simplified) -->
+    <g fill="rgba(255,255,255,0.8)">
+      <!-- Person 1 -->
+      <circle cx="120" cy="80" r="20" fill="#fbbf24"/>
+      <rect x="110" y="100" width="20" height="30" rx="3" fill="#1f2937"/>
+      
+      <!-- Person 2 -->
+      <circle cx="200" cy="60" r="20" fill="#fbbf24"/>
+      <rect x="190" y="80" width="20" height="30" rx="3" fill="#3b82f6"/>
+      
+      <!-- Person 3 -->
+      <circle cx="280" cy="80" r="20" fill="#fbbf24"/>
+      <rect x="270" y="100" width="20" height="30" rx="3" fill="#10b981"/>
+    </g>
+    
+    <!-- Laptops on table -->
+    <rect x="150" y="100" width="30" height="20" rx="2" fill="#374151"/>
+    <rect x="220" y="100" width="30" height="20" rx="2" fill="#374151"/>
+  </g>
+  
+  <!-- Innovation elements -->
+  <g fill="rgba(255,255,255,0.4)">
+    <path d="M50 80 L70 60 L90 80 L70 100 Z"/>
+    <circle cx="520" cy="100" r="25"/>
+    <rect x="480" y="300" width="40" height="40" rx="8"/>
+  </g>
+  
+  <!-- Text overlay -->
+  <text x="300" y="50" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="32" font-weight="bold">Our Story</text>
+  <text x="300" y="80" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="Arial, sans-serif" font-size="16">Building the future through collaboration</text>
+</svg>

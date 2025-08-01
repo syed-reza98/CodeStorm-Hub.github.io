@@ -1,0 +1,20 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="saasGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#saasGrad)"/>
+  <!-- SaaS platform interface -->
+  <g transform="translate(50, 60)" fill="rgba(255,255,255,0.2)">
+    <rect x="0" y="0" width="300" height="160" rx="8"/>
+    <!-- Navigation -->
+    <rect x="20" y="20" width="260" height="20" rx="4" fill="rgba(255,255,255,0.3)"/>
+    <!-- Content blocks -->
+    <rect x="20" y="50" width="80" height="80" rx="4" fill="rgba(255,255,255,0.1)"/>
+    <rect x="110" y="50" width="80" height="80" rx="4" fill="rgba(255,255,255,0.1)"/>
+    <rect x="200" y="50" width="80" height="80" rx="4" fill="rgba(255,255,255,0.1)"/>
+  </g>
+  <text x="200" y="280" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">SaaS Platform</text>
+</svg>

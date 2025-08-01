@@ -1,0 +1,16 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="digitalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#digitalGrad)"/>
+  <!-- Digital transformation visual elements -->
+  <g fill="rgba(255,255,255,0.3)">
+    <rect x="50" y="100" width="60" height="40" rx="4"/>
+    <circle cx="200" cy="120" r="30"/>
+    <polygon points="300,80 330,100 330,140 300,160 270,140 270,100"/>
+  </g>
+  <text x="200" y="280" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Digital Transformation</text>
+</svg>

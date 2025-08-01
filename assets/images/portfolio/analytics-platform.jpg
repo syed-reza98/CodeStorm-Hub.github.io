@@ -1,0 +1,20 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="analyticsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#analyticsGrad)"/>
+  <!-- Analytics dashboard -->
+  <g transform="translate(50, 50)" fill="rgba(255,255,255,0.3)">
+    <rect x="0" y="0" width="300" height="180" rx="8"/>
+    <!-- Charts -->
+    <rect x="20" y="30" width="80" height="60" rx="4" fill="rgba(255,255,255,0.2)"/>
+    <rect x="120" y="30" width="80" height="60" rx="4" fill="rgba(255,255,255,0.2)"/>
+    <rect x="220" y="30" width="60" height="60" rx="4" fill="rgba(255,255,255,0.2)"/>
+    <!-- Data visualization lines -->
+    <path d="M30 120 L50 100 L70 110 L90 90" stroke="white" stroke-width="2" fill="none"/>
+  </g>
+  <text x="200" y="280" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Analytics Platform</text>
+</svg>
