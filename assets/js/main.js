@@ -599,10 +599,17 @@ function openProjectModal(projectId) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     
-    // Focus management for accessibility
-    const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-    if (firstFocusable) {
-        firstFocusable.focus();
+    // Enhanced focus management for accessibility
+    setTimeout(() => {
+        const closeButton = modal.querySelector('.modal-close');
+        if (closeButton) {
+            closeButton.focus();
+        }
+    }, 100);
+    
+    // Announce modal opening to screen readers
+    if (window.announceToScreenReader) {
+        window.announceToScreenReader(`Project details modal opened for ${project.title}`);
     }
 }
 
@@ -611,6 +618,17 @@ function closeProjectModal() {
     if (modal) {
         modal.classList.remove('active');
         document.body.style.overflow = '';
+        
+        // Return focus to the button that opened the modal
+        const lastFocusedButton = document.querySelector('.project-details-btn[data-project]');
+        if (lastFocusedButton) {
+            setTimeout(() => lastFocusedButton.focus(), 100);
+        }
+        
+        // Announce modal closing to screen readers
+        if (window.announceToScreenReader) {
+            window.announceToScreenReader('Project details modal closed');
+        }
     }
 }
 
@@ -959,9 +977,14 @@ function initializeLoadingSpinner() {
 // Accessibility enhancements
 function initializeAccessibility() {
     // Keyboard navigation for custom components
-    const interactiveElements = document.querySelectorAll('[role="button"], .btn, .nav-link');
+    const interactiveElements = document.querySelectorAll('[role="button"], .btn, .nav-link, .faq-question, .filter-btn, .project-details-btn');
     
     interactiveElements.forEach(element => {
+        // Add tabindex if not already set
+        if (!element.hasAttribute('tabindex') && !['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'].includes(element.tagName)) {
+            element.setAttribute('tabindex', '0');
+        }
+        
         element.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -986,31 +1009,56 @@ function initializeAccessibility() {
         });
     }
     
-    // Trap focus in mobile menu when open
+    // Enhanced focus trapping for mobile menu and modals
     document.addEventListener('keydown', (e) => {
+        // Mobile menu focus trap
         if (e.key === 'Tab' && navbarMenu && navbarMenu.classList.contains('active')) {
-            const focusableElements = navbarMenu.querySelectorAll(
-                'a, button, [tabindex]:not([tabindex="-1"])'
-            );
-            const firstElement = focusableElements[0];
-            const lastElement = focusableElements[focusableElements.length - 1];
-            
-            if (e.shiftKey && document.activeElement === firstElement) {
-                e.preventDefault();
-                lastElement.focus();
-            } else if (!e.shiftKey && document.activeElement === lastElement) {
-                e.preventDefault();
-                firstElement.focus();
-            }
+            trapFocus(e, navbarMenu);
+        }
+        
+        // Modal focus trap
+        const activeModal = document.querySelector('.project-modal.active');
+        if (e.key === 'Tab' && activeModal) {
+            trapFocus(e, activeModal);
         }
         
         // Close mobile menu with Escape key
-        if (e.key === 'Escape' && navbarMenu && navbarMenu.classList.contains('active')) {
-            navbarMenu.classList.remove('active');
-            mobileMenuBtn.setAttribute('aria-expanded', 'false');
-            mobileMenuBtn.focus();
+        if (e.key === 'Escape') {
+            if (navbarMenu && navbarMenu.classList.contains('active')) {
+                navbarMenu.classList.remove('active');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
+                lines.forEach(line => {
+                    line.style.transform = '';
+                    line.style.opacity = '';
+                });
+                mobileMenuBtn.focus();
+            }
+            
+            // Close modal with Escape key
+            const activeModal = document.querySelector('.project-modal.active');
+            if (activeModal) {
+                closeProjectModal();
+            }
         }
     });
+    
+    // Focus trap utility function
+    function trapFocus(e, container) {
+        const focusableElements = container.querySelectorAll(
+            'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        
+        if (e.shiftKey && document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+        }
+    }
     
     // Announce dynamic content changes to screen readers
     function announceToScreenReader(message) {
@@ -1128,5 +1176,5 @@ window.CodeStormUtils = utils;
 // Initialize performance monitoring
 initializePerformanceMonitoring();
 
-// Optional: Initialize service worker for PWA features
-// initializeServiceWorker();
+// Initialize service worker for PWA features
+initializeServiceWorker();

@@ -83,20 +83,20 @@
 
 /* Dark Theme Variables */
 [data-theme="dark"] {
-  --text-color: var(--gray-100);
-  --text-secondary: var(--gray-300);
+  --text-color: var(--gray-50); /* Better contrast */
+  --text-secondary: var(--gray-200); /* Better contrast */
   --text-muted: var(--gray-400);
   --bg-color: var(--gray-900);
   --bg-secondary: var(--gray-800);
   --bg-tertiary: var(--gray-700);
-  --border-color: var(--gray-700);
+  --border-color: var(--gray-600); /* Better contrast */
   --card-bg: var(--gray-800);
 }
 
 /* Light Theme Variables (Default) */
 [data-theme="light"] {
   --text-color: var(--gray-900);
-  --text-secondary: var(--gray-700);
+  --text-secondary: var(--gray-600); /* Better contrast */
   --text-muted: var(--gray-500);
   --bg-color: var(--white);
   --bg-secondary: var(--gray-50);
@@ -198,6 +198,52 @@ img {
 
 .skip-link:focus {
   top: 6px;
+}
+
+/* Page Load Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Apply animations to elements */
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.6s ease-out;
 }
 
 /* Loading Spinner */
@@ -376,8 +422,22 @@ img {
   background: none;
   border: none;
   cursor: pointer;
-  padding: var(--space-2);
+  padding: var(--space-3);
   gap: 4px;
+  min-width: 44px; /* Minimum touch target size */
+  min-height: 44px;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+.mobile-menu-btn:hover {
+  background-color: var(--gray-100);
+}
+
+[data-theme="dark"] .mobile-menu-btn:hover {
+  background-color: var(--gray-800);
 }
 
 .hamburger-line {
@@ -385,6 +445,7 @@ img {
   height: 2px;
   background: var(--text-color);
   transition: var(--transition-fast);
+  border-radius: 1px;
 }
 
 @media (max-width: 768px) {
@@ -406,6 +467,9 @@ img {
     opacity: 0;
     visibility: hidden;
     transition: var(--transition);
+    box-shadow: var(--shadow-lg);
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
   }
   
   .navbar-menu.active {
@@ -420,8 +484,22 @@ img {
     width: 100%;
   }
   
+  .nav-link {
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    min-height: 44px; /* Better touch target */
+    display: flex;
+    align-items: center;
+  }
+  
   .navbar-actions {
     justify-content: center;
+    gap: var(--space-4);
+  }
+  
+  .theme-toggle {
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 
@@ -439,43 +517,96 @@ img {
   transition: var(--transition-fast);
   font-size: var(--text-sm);
   line-height: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 44px; /* Better touch target */
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
 }
 
 .btn-sm {
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-xs);
+  min-height: 36px;
 }
 
 .btn-lg {
   padding: var(--space-4) var(--space-8);
   font-size: var(--text-base);
+  min-height: 52px;
 }
 
 .btn-primary {
   background: var(--primary-color);
   color: white;
   border-color: var(--primary-color);
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
 }
 
 .btn-primary:hover {
   background: var(--primary-dark);
   border-color: var(--primary-dark);
   color: white;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
 }
 
 .btn-outline {
   background: transparent;
   color: var(--primary-color);
   border-color: var(--primary-color);
+  position: relative;
+}
+
+.btn-outline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+  z-index: -1;
 }
 
 .btn-outline:hover {
-  background: var(--primary-color);
   color: white;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+}
+
+.btn-outline:hover::after {
+  width: 100%;
+}
+
+/* Button loading state */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn:disabled:hover {
+  transform: none !important;
 }
 
 /* Hero Section */
@@ -1222,6 +1353,56 @@ section {
 *:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Enhanced focus for buttons */
+.btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+/* Focus for nav links */
+.nav-link:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+/* Focus for form elements */
+.form-input:focus-visible,
+.form-select:focus-visible,
+.form-textarea:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-color: var(--primary-color);
+}
+
+/* Focus for interactive elements */
+.faq-question:focus-visible,
+.filter-btn:focus-visible,
+.project-details-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Skip link styles */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary-color);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  z-index: var(--z-tooltip);
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 6px;
 }
 
 /* Page Hero Sections */
