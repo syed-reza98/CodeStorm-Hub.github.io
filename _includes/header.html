@@ -1,11 +1,13 @@
 <header class="header" role="banner">
     <nav class="navbar" role="navigation" aria-label="Main navigation">
         <div class="container">
-                <div class="navbar-brand">
-                    <a href="{{ '/' | relative_url }}" class="logo" aria-label="CodeStorm Hub home">
-                        <img src="{{ '/assets/images/logo.svg' | relative_url }}" alt="CodeStorm Hub" width="40" height="40" loading="eager">
-                        <span class="logo-text">CodeStorm Hub</span>
-                    </a>                <!-- Mobile menu button -->
+            <div class="navbar-brand">
+                <a href="{{ '/' | relative_url }}" class="logo" aria-label="CodeStorm Hub home">
+                    <img src="{{ '/assets/images/logo.svg' | relative_url }}" alt="CodeStorm Hub" width="40" height="40" loading="eager">
+                    <span class="logo-text">CodeStorm Hub</span>
+                </a>
+                
+                <!-- Mobile menu button -->
                 <button class="mobile-menu-btn" aria-label="Toggle mobile menu" aria-expanded="false">
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
@@ -50,7 +52,7 @@
                     </button>
                     
                     <!-- CTA Button -->
-                    <a href="contact.html" class="btn btn-primary cta-btn">
+                    <a href="{{ '/contact/' | relative_url }}" class="btn btn-primary cta-btn">
                         Get Started
                     </a>
                 </div>
