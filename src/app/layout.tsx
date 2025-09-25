@@ -1,7 +1,21 @@
 import type { Metadata } from "next";
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "CodeStorm Hub - Innovative Technology Solutions",
@@ -32,8 +46,6 @@ export const metadata: Metadata = {
     images: ["/og-image.jpg"],
     creator: "@codestormhub",
   },
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#6366f1",
 };
 
 export default function RootLayout({
@@ -42,16 +54,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="font-sans antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <html lang="en" className={`scroll-smooth ${inter.variable} ${poppins.variable}`}>
+      <body className="font-sans antialiased bg-background text-foreground">
         <Header />
         <main className="min-h-screen">
           {children}
