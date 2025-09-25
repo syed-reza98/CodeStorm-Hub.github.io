@@ -1,0 +1,24 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="appleIconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="180" height="180" rx="30" fill="url(#appleIconGrad)"/>
+  
+  <!-- CodeStorm Hub logo -->
+  <g transform="translate(40, 40)">
+    <!-- Lightning bolt -->
+    <path d="M30 10 L70 10 L50 50 L70 50 L30 110 L50 70 L30 70 Z" 
+          fill="white" stroke="none"/>
+    
+    <!-- Abstract code brackets -->
+    <g fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="20">
+      <text x="75" y="40">&lt;</text>
+      <text x="75" y="60">/</text>
+      <text x="75" y="80">&gt;</text>
+    </g>
+  </g>
+</svg>
